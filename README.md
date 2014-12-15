@@ -1,6 +1,13 @@
-FEASER 
-======
-(*F*ramework for *E*xperimentation and *A*nalysis in *S*ensory and *E*motional *R*esearch)
+FRESHER 
+=======
+(
+**FR**ramework for 
+**E**motional 
+**S**ensory 
+**H**uman 
+**E**xperimental 
+**R**esearch
+)
 
 License
 -------
@@ -10,7 +17,7 @@ permissive open license will be adopted when the competition concludes.
 
 What is it?
 -----------
-FEASER is intended for people who are researching human subjects. It is a toolset that
+FRESHER is intended for people who are researching human subjects. It is a toolset that
 allows the researcher to:
 * design and build experiments
 * run experiments
@@ -21,19 +28,19 @@ allows the researcher to:
 Who it is for?
 --------------
 The term researchers includes a lot of people, such as academia, students, individuals 
-at corporations, or even hobbyists. Some of the fields that might find FEASER useful are:
+at corporations, or even hobbyists. Some of the fields that might find FRESHER useful are:
 * psychology
 * marketing
 * education/training
 
 How does it work?
 -----------------
-In order to build an experiment, a researcher needs to write a script. FEASER exposes an
+In order to build an experiment, a researcher needs to write a script. FRESHER exposes an
 API to do this very easily. A simple experiment can be created with very little or no
 programming knowledge. 
 
 Instead of inventing and requiring a new scripting language,
-FEASER lets researchers use a language that they may already know, or if not, could be
+FRESHER lets researchers use a language that they may already know, or if not, could be
 learned easily. Two languages are currently supported, Python and C#. JavaScript may be
 added at a later date, and other languages will be considered depending on demand.
 
