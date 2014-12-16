@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using RedCell.Research.Experiment;
 
 namespace RedCell.Research.Experiment.UI
 {
@@ -15,7 +14,7 @@ namespace RedCell.Research.Experiment.UI
         /// <summary>
         /// Initializes a new instance of the <see cref="CameraView"/> class.
         /// </summary>
-        public CameraView(float x, float y, float w, float h, ICamera camera, CameraViews view)
+        public CameraView(ICamera camera, CameraViews view)
         {
             if (camera == null)
                 throw new ArgumentNullException("camera");
@@ -24,9 +23,6 @@ namespace RedCell.Research.Experiment.UI
                 throw new ArgumentOutOfRangeException("view");
             
             this.Stretch = Stretch.Uniform;
-            this.Margin = new System.Windows.Thickness(x, y, 0, 0);
-            this.Width = w;
-            this.Height = h;
 
             View = view;
             Camera = camera;
@@ -35,24 +31,6 @@ namespace RedCell.Research.Experiment.UI
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets the x.
-        /// </summary>
-        /// <value>The x.</value>
-        public double X
-        {
-            get { return Margin.Left; }
-        }
-
-        /// <summary>
-        /// Gets the y.
-        /// </summary>
-        /// <value>The y.</value>
-        public double Y
-        {
-            get { return Margin.Top; }
-        }
-
         public ICamera Camera { get; private set; }
 
         public CameraViews View { get; private set; }
@@ -86,7 +64,7 @@ namespace RedCell.Research.Experiment.UI
                 PXCMImage.ImageData data;
                 var image = frameinfo.SourceFrame as PXCMImage;
                 image.AcquireAccess(PXCMImage.Access.ACCESS_READ, format, out data);
-                Source = data.ToWritableBitmap((int)Width, (int)Height, 72, 72);
+                Source = data.ToWritableBitmap(image.info.width, image.info.height, 72, 72);
                 image.ReleaseAccess(data);
             });
         }

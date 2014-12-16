@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
-using System.Windows.Shapes;
 
 namespace RedCell.Research.Experiment.UI
 {
-    public class CameraFaceAnnotation : Canvas
+    public class CameraFaceAnnotation : Canvas, IControl
     {
-        System.Windows.Shapes.Rectangle _rectangle;
+        readonly System.Windows.Shapes.Rectangle _rectangle;
 
         public CameraFaceAnnotation(ICameraView view)
         {
             CameraView = view;
-
-            this.Margin = new Thickness(view.X, view.Y, 0, 0);
-            this.Width = view.Width;
-            this.Height = view.Height;
 
             _rectangle = new System.Windows.Shapes.Rectangle 
             {

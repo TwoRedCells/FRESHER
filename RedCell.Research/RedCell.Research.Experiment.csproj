@@ -43,6 +43,7 @@
     <Compile Include="IControl.cs" />
     <Compile Include="IExperimentUI.cs" />
     <Compile Include="IRectangle.cs" />
+    <Compile Include="IRegion.cs" />
     <Compile Include="IScript.cs" />
     <Compile Include="IScriptEngine.cs" />
     <Compile Include="Rectangle.cs" />

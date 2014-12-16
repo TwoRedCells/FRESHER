@@ -40,6 +40,9 @@ namespace RedCell.Research.Experiment.Scripting
             var experiment = Assembly.Load("RedCell.Research.Experiment");
             Source.Engine.Runtime.LoadAssembly(experiment);
 
+            var uu = Assembly.Load("RedCell.Research.Experiment.UI.WPF");
+            Source.Engine.Runtime.LoadAssembly(uu);
+
             var camera = fac.GetProperty("Camera", BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.Public).GetValue(null, null);
             scope.SetVariable("Camera", camera);
             Source.Execute(scope);
@@ -55,7 +58,7 @@ namespace RedCell.Research.Experiment.Scripting
             {
                 Source.Compile();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine("Script compilation error: {0}", ex.Message);
             }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RedCell.Research.Experiment
+﻿namespace RedCell.Research.Experiment
 {
-    public interface ICameraView : IControl, IRectangle
+    public interface ICameraView : IControl
     {
         ICamera Camera { get; }
     }

@@ -17,7 +17,7 @@ permissive open license will be adopted when the competition concludes.
 
 What is it?
 -----------
-FRESHER is intended for people who are researching human subjects. It is a toolset that
+*FRESHER* is intended for people who are researching human subjects. It is a toolset that
 allows the researcher to:
 * design and build experiments
 * run experiments
@@ -28,14 +28,14 @@ allows the researcher to:
 Who it is for?
 --------------
 The term researchers includes a lot of people, such as academia, students, individuals 
-at corporations, or even hobbyists. Some of the fields that might find FRESHER useful are:
+at corporations, or even hobbyists. Some of the fields that might find *FRESHER* useful are:
 * psychology
 * marketing
 * education/training
 
 How does it work?
 -----------------
-In order to build an experiment, a researcher needs to write a script. FRESHER exposes an
+In order to build an experiment, a researcher needs to write a script. *FRESHER* exposes an
 API to do this very easily. A simple experiment can be created with very little or no
 programming knowledge. 
 

@@ -35,11 +35,11 @@ namespace RedCell.Research.Experiment.UI
             System.Windows.MessageBox.Show(message);
         }
 
-        public ICameraView AddCameraView(float x, float y, float w, float h, ICamera camera, CameraViews view)
+        public IRegion AddRegion(float x, float y, float w, float h)
         {
-            var cv = new CameraView(x, y, w, h, camera, view);
-            Canvas.Children.Add(cv);
-            return cv;
+            var r = new Region(x, y, w, h);
+            Canvas.Children.Add(r);
+            return r;
         }
 
         public void AddCameraFaceAnnotation(ICameraView view)
