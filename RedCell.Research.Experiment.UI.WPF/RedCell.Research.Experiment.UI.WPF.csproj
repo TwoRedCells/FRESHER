@@ -63,6 +63,8 @@
     </ApplicationDefinition>
     <Compile Include="Control.cs" />
     <Compile Include="Region.cs" />
+    <Compile Include="TextView.cs" />
+    <Compile Include="UISleepHelper.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

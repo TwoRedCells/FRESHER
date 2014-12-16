@@ -19,9 +19,8 @@ namespace RedCell.Research.Experiment
         /// </summary>
         public static void Initialize()
         {
-            Camera = new RealSenseCamera();
-//            Camera.Initialize();
-//            Camera.Start();
+            try { Camera = new RealSenseCamera();}
+            catch(ResearchException) { /* Whatever. */ }
         }
 
         /// <summary>

@@ -26,12 +26,17 @@ namespace RedCell.Research.Experiment.UI
 
         public void Add(IControl content)
         {
-            Children.Add(content as UIElement);
+            UISleepHelper.Do(() => Children.Add(content as UIElement));
         }
 
         public void Remove(IControl content)
         {
             Children.Remove(content as UIElement);
+        }
+
+        public void Clear()
+        {
+            UISleepHelper.Do(() => Children.Clear());
         }
     }
 }

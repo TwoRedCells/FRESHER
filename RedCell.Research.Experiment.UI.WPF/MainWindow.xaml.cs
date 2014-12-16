@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using RedCell.Research.Experiment;
 
 namespace RedCell.Research.Experiment.UI
@@ -21,13 +23,15 @@ namespace RedCell.Research.Experiment.UI
     /// </summary>
     public partial class MainWindow : Window, IExperimentUI
     {
+
+
         public MainWindow()
         {
             InitializeComponent();
 
             Facilitator.Initialize();
             Facilitator.UI = this;
-            Experiment.Facilitator.RunExperiment("test.py");
+            Facilitator.RunExperiment("test.py");
         }
 
         public void MessageBox(string message)
@@ -46,6 +50,11 @@ namespace RedCell.Research.Experiment.UI
         {
             var c = new CameraFaceAnnotation(view);
             Canvas.Children.Add(c);
+        }
+
+        public void Wait(double seconds)
+        {
+            UISleepHelper.Wait(seconds);
         }
     }
 }
