@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -29,9 +30,10 @@ namespace RedCell.Research.Experiment.UI
         {
             InitializeComponent();
 
+            Directory.SetCurrentDirectory("Experiments");
             Facilitator.Initialize();
             Facilitator.UI = this;
-            Facilitator.RunExperiment("test.py");
+            Facilitator.RunExperiment("Cute/cute.py");
         }
 
         public void MessageBox(string message)

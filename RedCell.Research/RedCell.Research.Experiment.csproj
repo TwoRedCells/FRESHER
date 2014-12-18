@@ -34,6 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DataEventArgs.cs" />
+    <Compile Include="EmotionEventArgs.cs" />
     <Compile Include="FaceEventArgs.cs" />
     <Compile Include="CameraFrameEventArgs.cs" />
     <Compile Include="CameraViews.cs" />
@@ -42,6 +44,7 @@
     <Compile Include="ICameraView.cs" />
     <Compile Include="IControl.cs" />
     <Compile Include="IExperimentUI.cs" />
+    <Compile Include="ILoggable.cs" />
     <Compile Include="IRectangle.cs" />
     <Compile Include="IRegion.cs" />
     <Compile Include="IScript.cs" />

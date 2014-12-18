@@ -2,7 +2,7 @@
 
 namespace RedCell.Research.Experiment
 {
-    public interface ICamera
+    public interface ICamera : ILoggable
     {
         event EventHandler<CameraFrameEventArgs> FrameAvailable;
 

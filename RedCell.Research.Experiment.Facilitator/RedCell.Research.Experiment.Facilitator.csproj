@@ -46,6 +46,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RedCell.Components\RedCell.Windows.Forms.Charts\RedCell.UI.WPF.Charts.csproj">
+      <Project>{6d0bedcc-2322-4b04-906f-1290e17ecae8}</Project>
+      <Name>RedCell.UI.WPF.Charts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RedCell.Research.Experiment.Logging\RedCell.Research.Experiment.Logging.csproj">
+      <Project>{ebd16889-5e1d-4fa2-96fb-42b9de3d93e2}</Project>
+      <Name>RedCell.Research.Experiment.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RedCell.Research.Experiment.Scripting\RedCell.Research.Experiment.Scripting.csproj">
       <Project>{59c291af-a53b-4544-86f7-6e098f40b930}</Project>
       <Name>RedCell.Research.Experiment.Scripting</Name>
@@ -69,6 +77,9 @@
     <Content Include="lib\x86\libpxclog.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

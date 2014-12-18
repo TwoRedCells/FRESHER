@@ -62,7 +62,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Control.cs" />
+    <Compile Include="StripChartView.cs" />
     <Compile Include="Region.cs" />
+    <Compile Include="ImageView.cs" />
     <Compile Include="TextView.cs" />
     <Compile Include="UISleepHelper.cs" />
     <Page Include="MainWindow.xaml">
@@ -103,7 +105,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="test.py">
+    <None Include="Experiments\Cute\Cute.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -111,6 +113,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RedCell.Components\RedCell.Windows.Forms.Charts\RedCell.UI.WPF.Charts.csproj">
+      <Project>{6d0bedcc-2322-4b04-906f-1290e17ecae8}</Project>
+      <Name>RedCell.UI.WPF.Charts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\RedCell.Components\RedCell\RedCell.Portable.csproj">
       <Project>{3f6faf82-85e6-4db2-8b8f-2b2648edf94b}</Project>
       <Name>RedCell.Portable</Name>
@@ -118,6 +124,10 @@
     <ProjectReference Include="..\RedCell.Research.Experiment.Facilitator\RedCell.Research.Experiment.Facilitator.csproj">
       <Project>{ee90a9c1-d5e5-4a58-8c76-080d6979ef3e}</Project>
       <Name>RedCell.Research.Experiment.Facilitator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RedCell.Research.Experiment.Logging\RedCell.Research.Experiment.Logging.csproj">
+      <Project>{ebd16889-5e1d-4fa2-96fb-42b9de3d93e2}</Project>
+      <Name>RedCell.Research.Experiment.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\RedCell.Research.Sensors.Camera\RedCell.Research.Sensors.Camera.csproj">
       <Project>{f92f1849-5143-4ef8-96a9-40811c4280bf}</Project>
@@ -129,11 +139,32 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Experiments\Cute\images\bunny.jpg" />
+    <Resource Include="Experiments\Cute\images\chick.jpg" />
+    <Resource Include="Experiments\Cute\images\dog.jpg" />
+    <Resource Include="Experiments\Cute\images\ducky.jpg" />
+    <Resource Include="Experiments\Cute\images\elephant.jpg" />
+    <Resource Include="Experiments\Cute\images\fox.jpg" />
+    <Resource Include="Experiments\Cute\images\hamster.jpg" />
+    <Resource Include="Experiments\Cute\images\husky.jpg" />
+    <Resource Include="Experiments\Cute\images\kitten.jpg" />
+    <Resource Include="Experiments\Cute\images\lemur.jpg" />
+    <Resource Include="Experiments\Cute\images\lizard.jpg" />
+    <Resource Include="Experiments\Cute\images\lynx.jpg" />
+    <Resource Include="Experiments\Cute\images\meercat.jpg" />
+    <Resource Include="Experiments\Cute\images\monkey.jpg" />
+    <Resource Include="Experiments\Cute\images\owl.jpg" />
+    <Resource Include="Experiments\Cute\images\penguin.jpg" />
+    <Resource Include="Experiments\Cute\images\piglet.jpg" />
+    <Resource Include="Experiments\Cute\images\polar-bear.jpg" />
+    <Resource Include="Experiments\Cute\images\seal.jpg" />
+    <Resource Include="Experiments\Cute\images\turtle.jpg" />
     <Content Include="lib\Shim.Drawing.dll" />
     <Content Include="lib\x86\libpxcclr.cs.dll" />
     <Content Include="lib\x86\libpxccpp2c.dll" />
     <Content Include="lib\x86\libpxclog.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

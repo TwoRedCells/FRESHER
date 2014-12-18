@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using RedCell;
 using RedCell.Research.Experiment;
 
 namespace RedCell.Research.Sensors
@@ -33,36 +30,45 @@ namespace RedCell.Research.Sensors
         public const int DefaultHeight = 480;
         #endregion
 
+        #region Fields
+        private PXCMSenseManager _sm = null;
+        #endregion
+
         #region Initialization
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RealSenseCamera"/> class.
+        /// </summary>
+        public RealSenseCamera()
+        {
+        }
+
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public static void Initialize()
+        public bool Initialize()
         {
             if(Session == null)
                 Session = PXCMSession.CreateInstance();
 
             var version = Session.QueryVersion();
             Console.WriteLine("SDK Version {0}.{1}", version.major, version.minor);
-        }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealSenseCamera"/> class.
-        /// </summary>
-        public RealSenseCamera()
-        {
-            Initialize();
             EnumerateDevices();
+            EnumerateResolutions();
 
             // Set default camera.
             Device = Devices.Where(d => d.Key == RealSenseKey).Select(d => d.Value).FirstOrDefault();
             if (Device == null)
-                throw new ResearchException("RealSense camera not available.");
+                return false;
 
-            EnumerateResolutions();
-
-            // Set default resolution.
-            Resolution = ColorResolutions[RealSenseKey].Where(r => r.Item1.format == DefaultPixelFormat && r.Item1.width == DefaultWidth && r.Item1.height == DefaultHeight).Select(r => r).FirstOrDefault();
+            if (Device != null)
+            {
+                // Set default resolution.
+                Resolution = ColorResolutions[RealSenseKey].Where(r =>
+                            r.Item1.format == DefaultPixelFormat && r.Item1.width == DefaultWidth &&
+                            r.Item1.height == DefaultHeight).Select(r => r).FirstOrDefault();
+            }
+            return true;
         }
         #endregion
 
@@ -80,6 +86,14 @@ namespace RedCell.Research.Sensors
             Tuple.Create(640, 480),
             Tuple.Create(640, 360),
         };
+
+        public bool EnableFace { get; set; }
+
+        public bool EnableEmotion { get; set; }
+
+        public bool EnableStreaming { get; set; }
+
+        public bool EnableExpression { get; set; }
         #endregion
 
         #region Events
@@ -91,6 +105,14 @@ namespace RedCell.Research.Sensors
         {
             if (FaceFound != null)
                 FaceFound(sender, e);
+        }
+
+        public event EventHandler<DataEventArgs> DataAvailable;
+
+        private void OnDataAvailable(object sender, DataEventArgs e)
+        {
+            if (DataAvailable != null)
+                DataAvailable(sender, e);
         }
 
         public event EventHandler<CameraFrameEventArgs> ColourImage;
@@ -137,12 +159,92 @@ namespace RedCell.Research.Sensors
             if (FrameAvailable != null)
                 FrameAvailable(sender, new CameraFrameEventArgs(new CameraFrame(e.Value, CameraViews.Infrared)));
         }
+
+        /// <summary>
+        /// Occurs when [emotion found].
+        /// </summary>
+        public event EventHandler<EmotionEventArgs> EmotionFound;
+
+        /// <summary>
+        /// Handles the <see cref="E:EmotionFound" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EmotionEventArgs"/> instance containing the event data.</param>
+        private void OnEmotionFound(object sender, EmotionEventArgs e)
+        {
+            if (EmotionFound != null)
+                EmotionFound(sender, e);
+        }
+
+
         #endregion
 
         #region Methods
         /// <summary>
-        /// Enumerates the devices.
+        /// Starts this instance.
         /// </summary>
+        public void Start()
+        {
+            if (_sm != null)
+                throw new ResearchException("Camera is already started.");
+
+            _sm =  PXCMSenseManager.CreateInstance();
+
+            // Configure face detection.
+            if (EnableFace)
+            {
+                _sm.EnableFace();
+                var faceModule = _sm.QueryFace();
+                using (PXCMFaceConfiguration faceConfig = faceModule.CreateActiveConfiguration())
+                {
+                    faceConfig.EnableAllAlerts();
+                    faceConfig.pose.isEnabled = true;
+                    faceConfig.pose.maxTrackedFaces = 4;
+
+                    if (EnableExpression)
+                    {
+                        PXCMFaceConfiguration.ExpressionsConfiguration expression = faceConfig.QueryExpressions();
+                        expression.Enable();
+                        expression.EnableAllExpressions();
+                        faceConfig.ApplyChanges();
+                    }
+                }
+            }
+
+            if (EnableEmotion)
+            {
+                // Configure emotion detection.
+                _sm.EnableEmotion();
+            }
+
+            if (EnableStreaming)
+            {
+                // Configure streaming.
+                _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_COLOR, 640, 480);
+                _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_DEPTH, 640, 480);
+                _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_IR, 640, 480);
+            }
+
+            // Event handler for data callbacks.
+            var handler = new PXCMSenseManager.Handler {
+                onModuleProcessedFrame=OnModuleProcessedFrame
+            };
+
+            _sm.Init(handler);
+
+            // GO.
+            Debug.WriteLine("{0} Starting streaming.", Time());
+            _sm.StreamFrames(false);
+
+
+            //Debug.WriteLine("{0} End streaming.", Time());
+        }
+
+        private string Time()
+        {
+            return DateTime.Now.ToString("H:mm:ss");
+        }
+
         public void EnumerateDevices()
         {
             Devices = new Dictionary<string, PXCMCapture.DeviceInfo>();
@@ -151,7 +253,7 @@ namespace RedCell.Research.Sensors
                 group = PXCMSession.ImplGroup.IMPL_GROUP_SENSOR,
                 subgroup = PXCMSession.ImplSubgroup.IMPL_SUBGROUP_VIDEO_CAPTURE
             };
-                        
+
             for (int i = 0; ; i++)
             {
                 PXCMSession.ImplDesc desc1;
@@ -172,112 +274,6 @@ namespace RedCell.Research.Sensors
             }
         }
 
-        /// <summary>
-        /// Enumerates the resolutions.
-        /// </summary>
-        /// <exception cref="System.Exception">PXCMCapture.Device null</exception>
-        public void EnumerateResolutions()
-        {
-            ColorResolutions = new Dictionary<string, IEnumerable<Tuple<PXCMImage.ImageInfo, PXCMRangeF32>>>();
-            var desc = new PXCMSession.ImplDesc
-            {
-                group = PXCMSession.ImplGroup.IMPL_GROUP_SENSOR,
-                subgroup = PXCMSession.ImplSubgroup.IMPL_SUBGROUP_VIDEO_CAPTURE
-            };
-
-            for (int i = 0; ; i++)
-            {
-                PXCMSession.ImplDesc desc1;
-                if (Session.QueryImpl(desc, i, out desc1) < pxcmStatus.PXCM_STATUS_NO_ERROR) break;
-
-                PXCMCapture capture;
-                if (Session.CreateImpl(desc1, out capture) < pxcmStatus.PXCM_STATUS_NO_ERROR) continue;
-
-                for (int j = 0; ; j++)
-                {
-                    PXCMCapture.DeviceInfo info;
-                    if (capture.QueryDeviceInfo(j, out info) < pxcmStatus.PXCM_STATUS_NO_ERROR) break;
-
-                    PXCMCapture.Device device = capture.CreateDevice(j);
-                    if (device == null)
-                    {
-                        throw new Exception("PXCMCapture.Device null");
-                    }
-                    var deviceResolutions = new List<Tuple<PXCMImage.ImageInfo, PXCMRangeF32>>();
-
-                    for (int k = 0; k < device.QueryStreamProfileSetNum(PXCMCapture.StreamType.STREAM_TYPE_COLOR); k++)
-                    {
-                        PXCMCapture.Device.StreamProfileSet profileSet;
-                        device.QueryStreamProfileSet(PXCMCapture.StreamType.STREAM_TYPE_COLOR, k, out profileSet);
-                        var currentRes = new Tuple<PXCMImage.ImageInfo, PXCMRangeF32>(profileSet.color.imageInfo,
-                            profileSet.color.frameRate);
-
-                        if (SupportedColorResolutions.Contains(new Tuple<int, int>(currentRes.Item1.width, currentRes.Item1.height)))
-                        {
-                            deviceResolutions.Add(currentRes);
-                        }
-                    }
-                    ColorResolutions.Add(info.name, deviceResolutions);
-                    device.Dispose();
-                }                              
-                
-                capture.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Starts this instance.
-        /// </summary>
-        public void Start()
-        {
-            PXCMSenseManager sm =  PXCMSenseManager.CreateInstance();
-
-            // Configure face detection.
-            sm.EnableFace();
-            var faceModule = sm.QueryFace();
-            using (PXCMFaceConfiguration faceConfig = faceModule.CreateActiveConfiguration())
-            {
-                faceConfig.EnableAllAlerts();
-                faceConfig.pose.isEnabled = true;
-                faceConfig.pose.maxTrackedFaces = 4;
-
-                PXCMFaceConfiguration.ExpressionsConfiguration expression = faceConfig.QueryExpressions();
-                expression.Enable();
-                expression.EnableAllExpressions();
-                faceConfig.ApplyChanges();
-            }
-
-            // Configure emotion detection.
-            //sm.EnableEmotion();
-            //var emotionModule = sm.QueryEmotion();
-
-            // Configure streaming.
-            sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_COLOR, 640, 480);
-            sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_DEPTH, 640, 480);
-            var stat = sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_IR, 640, 480);
-
-            // Event handler for data callbacks.
-            var handler = new PXCMSenseManager.Handler {
-                onModuleProcessedFrame=OnModuleProcessedFrame
-            };
-
-            sm.Init(handler);
-
-            // GO.
-            Debug.WriteLine("{0} Starting streaming.", Time());
-            sm.StreamFrames(false);
-
-
-            //Debug.WriteLine("{0} End streaming.", Time());
-
-            //sm.Dispose();
-            //sm.Close();
-        }
-
-        private string Time()
-        {
-            return DateTime.Now.ToString("H:mm:ss");
-        }
 
         pxcmStatus OnModuleProcessedFrame(int type, PXCMBase module, PXCMCapture.Sample sample) 
         {
@@ -331,11 +327,12 @@ namespace RedCell.Research.Sensors
                         {
                             PXCMFaceData.ExpressionsData.FaceExpressionResult score;
                             expressionData.QueryExpression(expression, out score);
-                            expressionValues.Add(expression.ToString(), score.intensity / 100);
+                            expressionValues.Add(expression.ToString(), score.intensity / 100d);
                             Debug.WriteLine("{0} Expression: {1} == {2}", Time(), expression, score.intensity / 100d);
                         }
                     }
                     OnFaceFound(this, new FaceEventArgs(new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h), expressionValues));
+                    OnDataAvailable(this, new DataEventArgs(expressionValues));
                 }
             }
         }
@@ -362,7 +359,68 @@ namespace RedCell.Research.Sensors
 
         public void Stop()
         {
+            if (_sm != null)
+            {
+                _sm.Close();
+                _sm.Dispose();
+                _sm = null;
+            }
         }
+
+
+        /// <summary>
+        /// Enumerates the resolutions.
+        /// </summary>
+        /// <exception cref="System.Exception">PXCMCapture.Device null</exception>
+        public void EnumerateResolutions()
+        {
+            ColorResolutions = new Dictionary<string, IEnumerable<Tuple<PXCMImage.ImageInfo, PXCMRangeF32>>>();
+            var desc = new PXCMSession.ImplDesc
+            {
+                group = PXCMSession.ImplGroup.IMPL_GROUP_SENSOR,
+                subgroup = PXCMSession.ImplSubgroup.IMPL_SUBGROUP_VIDEO_CAPTURE
+            };
+
+            for (int i = 0; ; i++)
+            {
+                PXCMSession.ImplDesc desc1;
+                if (Session.QueryImpl(desc, i, out desc1) < pxcmStatus.PXCM_STATUS_NO_ERROR) break;
+
+                PXCMCapture capture;
+                if (Session.CreateImpl(desc1, out capture) < pxcmStatus.PXCM_STATUS_NO_ERROR) continue;
+
+                for (int j = 0; ; j++)
+                {
+                    PXCMCapture.DeviceInfo info;
+                    if (capture.QueryDeviceInfo(j, out info) < pxcmStatus.PXCM_STATUS_NO_ERROR) break;
+
+                    PXCMCapture.Device device = capture.CreateDevice(j);
+                    if (device == null)
+                    {
+                        throw new Exception("PXCMCapture.Device null");
+                    }
+                    var deviceResolutions = new List<Tuple<PXCMImage.ImageInfo, PXCMRangeF32>>();
+
+                    for (int k = 0; k < device.QueryStreamProfileSetNum(PXCMCapture.StreamType.STREAM_TYPE_COLOR); k++)
+                    {
+                        PXCMCapture.Device.StreamProfileSet profileSet;
+                        device.QueryStreamProfileSet(PXCMCapture.StreamType.STREAM_TYPE_COLOR, k, out profileSet);
+                        var currentRes = new Tuple<PXCMImage.ImageInfo, PXCMRangeF32>(profileSet.color.imageInfo,
+                            profileSet.color.frameRate);
+
+                        if (SupportedColorResolutions.Contains(new Tuple<int, int>(currentRes.Item1.width, currentRes.Item1.height)))
+                        {
+                            deviceResolutions.Add(currentRes);
+                        }
+                    }
+                    ColorResolutions.Add(info.name, deviceResolutions);
+                    device.Dispose();
+                }
+
+                capture.Dispose();
+            }
+        }
+
 
         #endregion
 

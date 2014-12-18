@@ -19,8 +19,8 @@ namespace RedCell.Research.Experiment
         /// </summary>
         public static void Initialize()
         {
-            try { Camera = new RealSenseCamera();}
-            catch(ResearchException) { /* Whatever. */ }
+                Camera = new RealSenseCamera();
+            Log = new Log();
         }
 
         /// <summary>
@@ -33,7 +33,13 @@ namespace RedCell.Research.Experiment
         /// Gets or sets the camera.
         /// </summary>
         /// <value>The camera.</value>
-        public static ICamera Camera { get; set; }
+        public static ICamera Camera { get; private set; }
+
+        /// <summary>
+        /// Gets the log.
+        /// </summary>
+        /// <value>The log.</value>
+        public static Log Log { get; private set; }
 
         /// <summary>
         /// Loads the experiment.

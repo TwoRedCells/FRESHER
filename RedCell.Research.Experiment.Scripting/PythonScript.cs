@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 
@@ -38,14 +38,14 @@ namespace RedCell.Research.Experiment.Scripting
             var ui = fac.GetProperty("UI", BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.Public).GetValue(null, null);
             scope.SetVariable("UI", ui);
 
-            var experiment = Assembly.Load("RedCell.Research.Experiment");
-            Source.Engine.Runtime.LoadAssembly(experiment);
-
-            var uu = Assembly.Load("RedCell.Research.Experiment.UI.WPF");
-            Source.Engine.Runtime.LoadAssembly(uu);
-
             var camera = fac.GetProperty("Camera", BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.Public).GetValue(null, null);
             scope.SetVariable("Camera", camera);
+
+            Source.Engine.Runtime.LoadAssembly(Assembly.Load("RedCell.Research.Experiment"));
+            Source.Engine.Runtime.LoadAssembly(Assembly.Load("RedCell.Research.Experiment.UI.WPF"));
+            Source.Engine.Runtime.LoadAssembly(Assembly.Load("RedCell.Research.Experiment.Logging"));
+            Source.Engine.Runtime.LoadAssembly(Assembly.Load("RedCell.UI.WPF.Charts"));
+
             Source.Execute(scope);
         }
 
