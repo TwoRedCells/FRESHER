@@ -108,6 +108,10 @@
       <Project>{ee90a9c1-d5e5-4a58-8c76-080d6979ef3e}</Project>
       <Name>RedCell.Research.Experiment.Facilitator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RedCell.Research.Experiment.UI\RedCell.Research.Experiment.UI.csproj">
+      <Project>{79fffa4c-8093-40e8-b08d-3c5c9d935b25}</Project>
+      <Name>RedCell.Research.Experiment.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WPF_Explorer_Tree\WPF_Explorer_Tree\RedCell.UI.WPF.FileSystemExplorer.csproj">
       <Project>{d043537e-1585-473e-a3af-4bf5fc0e3d41}</Project>
       <Name>RedCell.UI.WPF.FileSystemExplorer</Name>

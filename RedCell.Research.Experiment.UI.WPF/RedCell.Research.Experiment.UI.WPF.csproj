@@ -62,11 +62,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Control.cs" />
+    <Compile Include="ExperimentPage.xaml.cs">
+      <DependentUpon>ExperimentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StripChartView.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="ImageView.cs" />
     <Compile Include="TextView.cs" />
     <Compile Include="UISleepHelper.cs" />
+    <Page Include="ExperimentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,6 +135,10 @@
     <ProjectReference Include="..\RedCell.Research.Experiment.Logging\RedCell.Research.Experiment.Logging.csproj">
       <Project>{ebd16889-5e1d-4fa2-96fb-42b9de3d93e2}</Project>
       <Name>RedCell.Research.Experiment.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RedCell.Research.Experiment.UI\RedCell.Research.Experiment.UI.csproj">
+      <Project>{79fffa4c-8093-40e8-b08d-3c5c9d935b25}</Project>
+      <Name>RedCell.Research.Experiment.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\RedCell.Research.Sensors.Camera\RedCell.Research.Sensors.Camera.csproj">
       <Project>{f92f1849-5143-4ef8-96a9-40811c4280bf}</Project>

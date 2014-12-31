@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedCell.Research.Experiment.UI.WPF", "RedCell.Research.Experiment.UI.WPF\RedCell.Research.Experiment.UI.WPF.csproj", "{00CD5003-674C-4C56-BFCA-25D853DE9337}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedCell.Research.Experiment.UI.WPF.Designer", "RedCell.Research.Experiment.UI.WPF.Designer\RedCell.Research.Experiment.UI.WPF.Designer.csproj", "{9B18BDFF-EC7B-4B6D-AEF6-71FBE9262372}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedCell.UI.WPF.FileSystemExplorer", "WPF_Explorer_Tree\WPF_Explorer_Tree\RedCell.UI.WPF.FileSystemExplorer.csproj", "{D043537E-1585-473E-A3AF-4BF5FC0E3D41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedCell.Research.Experiment.UI", "RedCell.Research.Experiment.UI\RedCell.Research.Experiment.UI.csproj", "{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,16 @@ Global
 		{D043537E-1585-473E-A3AF-4BF5FC0E3D41}.Release|ARM.ActiveCfg = Release|Any CPU
 		{D043537E-1585-473E-A3AF-4BF5FC0E3D41}.Release|x64.ActiveCfg = Release|Any CPU
 		{D043537E-1585-473E-A3AF-4BF5FC0E3D41}.Release|x86.ActiveCfg = Release|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Release|ARM.ActiveCfg = Release|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Release|x64.ActiveCfg = Release|Any CPU
+		{79FFFA4C-8093-40E8-B08D-3C5C9D935B25}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

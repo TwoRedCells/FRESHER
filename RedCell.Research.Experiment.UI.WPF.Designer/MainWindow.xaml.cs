@@ -14,10 +14,6 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string RegistryPathKey = @"Software\Red Cell Innovation Inc.\RedCell.Research.Experiment\LastPath";
-        private string _experimentDirectory;
-        private FileSystemWatcher _watcher;
-
         #region Initialization
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -25,35 +21,16 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         public MainWindow()
         {
             InitializeComponent();
+            Settings.ExperimentDirectoryChanged += Watcher_Changed;
+        }
 
-            _watcher = new FileSystemWatcher();
-            _watcher.Renamed += Watcher_Renamed;
-            _watcher.Changed += Watcher_Changed;
-            _watcher.Created += Watcher_Changed;
-            _watcher.Deleted += Watcher_Changed;
-            _watcher.IncludeSubdirectories = false;
-            ExperimentDirectory = LoadPath() ?? Directory.GetCurrentDirectory();
-            _watcher.EnableRaisingEvents = true;
+        void Settings_ExperimentDirectoryChanged(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets the experiment directory.
-        /// </summary>
-        /// <value>The experiment directory.</value>
-        public string ExperimentDirectory
-        {
-            get { return _experimentDirectory; }
-            set
-            {
-                _experimentDirectory = value;
-                _watcher.Path = value;
-                ExperimentFolder.Text = value;
-                EnumerateExperiments();
-            }
-        }
-
         /// <summary>
         /// Gets the selected experiment.
         /// </summary>
@@ -72,27 +49,11 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
 
         #region Methods
         /// <summary>
-        /// Loads the path.
-        /// </summary>
-        private string LoadPath()
-        {
-            return Registry.CurrentUser.GetValue(RegistryPathKey) as string;
-        }
-
-        /// <summary>
-        /// Sets the path.
-        /// </summary>
-        private void SetPath(string path)
-        {
-            Registry.CurrentUser.SetValue(RegistryPathKey, path);
-        }
-
-        /// <summary>
         /// Handles the Changed event of the Watcher control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="fileSystemEventArgs">The <see cref="FileSystemEventArgs"/> instance containing the event data.</param>
-        private void Watcher_Changed(object sender, FileSystemEventArgs fileSystemEventArgs)
+        /// <param name="e">The <see cref="FileSystemEventArgs"/> instance containing the event data.</param>
+        private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
             Dispatcher.Invoke(EnumerateExperiments);
         }
@@ -115,12 +76,12 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         /// <exception cref="System.NotImplementedException"></exception>
         private void Browse_OnClick(object sender, RoutedEventArgs e)
         {
-            var picker = new VistaFolderBrowserDialog {SelectedPath = ExperimentDirectory, ShowNewFolderButton = true};
+            var picker = new VistaFolderBrowserDialog {SelectedPath = Settings.ExperimentDirectory, ShowNewFolderButton = true};
             if (picker.ShowDialog().Value)
             {
-                ExperimentDirectory = picker.SelectedPath;
-                Directory.SetCurrentDirectory(ExperimentDirectory);
-                SetPath(ExperimentDirectory);
+                Settings.ExperimentDirectory = picker.SelectedPath;
+                Directory.SetCurrentDirectory(Settings.ExperimentDirectory);
+                Settings.SetPath(Settings.ExperimentDirectory);
             }
         }
 
@@ -129,7 +90,7 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         /// </summary>
         private void EnumerateExperiments()
         {
-            var root = new DirectoryInfo(ExperimentDirectory);
+            var root = new DirectoryInfo(Settings.ExperimentDirectory);
             var subs = root.GetDirectories();
             var experiments = (from sub in subs where IsExperiment(sub) select sub.Name);
             ExperimentListBox.ItemsSource = experiments.ToList();
@@ -162,7 +123,7 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         /// <param name="name">The name.</param>
         private void OpenExperiment(string name)
         {
-            var path = Path.Combine(ExperimentDirectory, name);
+            var path = Path.Combine(Settings.ExperimentDirectory, name);
             Experiment.Load(path);
             FileSystemTree.RootPath = path;
         }
@@ -185,7 +146,7 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         private void CreateExperiment(string name)
         {
             var experiment = new Experiment(name);
-            experiment.Save(ExperimentDirectory);
+            experiment.Save(Settings.ExperimentDirectory);
         }
 
         /// <summary>
@@ -195,12 +156,7 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            _watcher.Renamed -= Watcher_Renamed;
-            _watcher.Changed -= Watcher_Changed;
-            _watcher.Created -= Watcher_Changed;
-            _watcher.Deleted -= Watcher_Changed;
-            _watcher.Dispose();
-            _watcher = null;
+            Settings.Dispose();
         }
         #endregion
 
