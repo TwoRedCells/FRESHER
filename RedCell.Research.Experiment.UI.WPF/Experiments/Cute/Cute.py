@@ -39,7 +39,7 @@ if (cameraOnline):
     #camRegion2.Add(camView2)
     #camRegion3.Add(camView3)
 
-
+    camRegion1.Add(CameraFaceAnnotation(camView1))
 ##UI.AddCameraFaceAnnotation(viewColour)
 
 

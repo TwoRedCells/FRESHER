@@ -28,10 +28,12 @@ namespace RedCell.Research.Experiment.UI
         {
             Dispatcher.Invoke(() =>
                 {
+                    double scaleX = this.ActualWidth / e.Width;
+                    double scaleY = this.ActualHeight / e.Height;
                     var bounds = e.Bounds;
-                    _rectangle.Margin = new Thickness(bounds.X, bounds.Y, 0, 0);
-                    _rectangle.Width = bounds.Width;
-                    _rectangle.Height = bounds.Height;
+                    _rectangle.Margin = new Thickness(bounds.X * scaleX, bounds.Y * scaleY, 0, 0);
+                    _rectangle.Width = bounds.Width * scaleX;
+                    _rectangle.Height = bounds.Height * scaleY;
                 });
         }
 

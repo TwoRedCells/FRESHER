@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="DataEventArgs.cs" />
     <Compile Include="EmotionEventArgs.cs" />
+    <Compile Include="CameraEventArgs.cs" />
     <Compile Include="FaceEventArgs.cs" />
     <Compile Include="CameraFrameEventArgs.cs" />
     <Compile Include="CameraViews.cs" />

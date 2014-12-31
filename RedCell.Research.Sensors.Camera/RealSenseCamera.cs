@@ -331,7 +331,7 @@ namespace RedCell.Research.Sensors
                             Debug.WriteLine("{0} Expression: {1} == {2}", Time(), expression, score.intensity / 100d);
                         }
                     }
-                    OnFaceFound(this, new FaceEventArgs(new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h), expressionValues));
+                    OnFaceFound(this, new FaceEventArgs(new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h), expressionValues, Resolution.Item1.width, Resolution.Item1.height));
                     OnDataAvailable(this, new DataEventArgs(expressionValues));
                 }
             }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace RedCell.Research.Experiment
 {
-    public class FaceEventArgs : EventArgs
+    public class FaceEventArgs : CameraEventArgs
     {
-        public FaceEventArgs(IRectangle bounds, Dictionary<string, double> expressions)
+        public FaceEventArgs(IRectangle bounds, Dictionary<string, double> expressions, int width, int height) : base(width, height)
         {
             Bounds = bounds;
             Expressions = expressions;

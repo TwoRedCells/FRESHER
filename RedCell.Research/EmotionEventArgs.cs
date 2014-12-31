@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace RedCell.Research.Experiment
 {
-    public class EmotionEventArgs : EventArgs
+    public class EmotionEventArgs : CameraEventArgs
     {
-        public EmotionEventArgs(IRectangle bounds, Dictionary<string, double> expressions)
+        public EmotionEventArgs(IRectangle bounds, Dictionary<string, double> expressions, int width, int height)
+            : base(width, height)
         {
             Bounds = bounds;
             Expressions = expressions;
