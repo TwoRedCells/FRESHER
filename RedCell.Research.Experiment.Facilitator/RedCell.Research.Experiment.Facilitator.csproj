@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Experiment.cs" />
     <Compile Include="Facilitator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,6 +57,10 @@
     <ProjectReference Include="..\RedCell.Research.Experiment.Scripting\RedCell.Research.Experiment.Scripting.csproj">
       <Project>{59c291af-a53b-4544-86f7-6e098f40b930}</Project>
       <Name>RedCell.Research.Experiment.Scripting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RedCell.Research.Experiment.UI\RedCell.Research.Experiment.UI.csproj">
+      <Project>{79fffa4c-8093-40e8-b08d-3c5c9d935b25}</Project>
+      <Name>RedCell.Research.Experiment.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\RedCell.Research.Sensors.Camera\RedCell.Research.Sensors.Camera.csproj">
       <Project>{f92f1849-5143-4ef8-96a9-40811c4280bf}</Project>

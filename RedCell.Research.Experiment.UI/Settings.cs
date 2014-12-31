@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Win32;
 
 
@@ -85,6 +86,28 @@ namespace RedCell.Research.Experiment.UI
         {
             Registry.CurrentUser.SetValue(RegistryPathKey, path);
         }
+
+        /// <summary>
+        /// Enumerates the experiments.
+        /// </summary>
+        public static string[] EnumerateExperiments()
+        {
+            var root = new DirectoryInfo(Settings.ExperimentDirectory);
+            var subs = root.GetDirectories();
+            return (from sub in subs where IsExperiment(sub) select sub.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Determines whether the specified directory is experiment.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns><c>true</c> if the specified directory is experiment; otherwise, <c>false</c>.</returns>
+        private static bool IsExperiment(DirectoryInfo directory)
+        {
+            return directory.GetFiles(Experiment.ExperimentFilename).Length == 1;
+        }
+
+
         #endregion
 
 

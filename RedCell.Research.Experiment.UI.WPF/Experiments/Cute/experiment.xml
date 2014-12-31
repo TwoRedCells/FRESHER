@@ -1,2 +1,2 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<Experiment name="Cute" schemaVersion="1" researcher="Yvan Rodrigues"/>
+<Experiment name="Cute" schemaVersion="1" researcher="Yvan Rodrigues" engine="Python" script="Cute.py"/>

@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml.Linq;
+using RedCell.Research.Experiment.Scripting;
 
 namespace RedCell.Research.Experiment
 {
@@ -36,6 +38,8 @@ namespace RedCell.Research.Experiment
         #endregion
 
         #region Properties
+        public ScriptingEngines Engine { get; set; }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -43,10 +47,10 @@ namespace RedCell.Research.Experiment
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the path.
+        /// Gets or sets the script path.
         /// </summary>
         /// <value>The path.</value>
-        public string Path { get; set; }
+        public string Script { get; set; }
 
         /// <summary>
         /// Gets or sets the researcher.
@@ -81,8 +85,9 @@ namespace RedCell.Research.Experiment
             {
                 Name = xml.Root.Attribute("name").Value,
                 Researcher = xml.Root.Attribute("researcher").Value,
-                SchemaVersion = int.Parse(xml.Root.Attribute("schemaVersion").Value)
-
+                Script = xml.Root.Attribute("script").Value,
+                SchemaVersion = int.Parse(xml.Root.Attribute("schemaVersion").Value),
+                Engine = (ScriptingEngines) Enum.Parse(typeof(ScriptingEngines), xml.Root.Attribute("engine").Value)
             };
             return experiment;
         }
@@ -93,7 +98,12 @@ namespace RedCell.Research.Experiment
         /// <param name="xml">The XML.</param>
         private static void UpgradeSchema(XDocument xml)
         {
-            
+            int version = int.Parse(xml.Root.Attribute("schemaVersion").Value);
+
+            if(version == 1)
+            {
+                xml.Root.Add(new XAttribute("engine", "Python"));
+            }
         }
 
         /// <summary>
@@ -115,7 +125,9 @@ namespace RedCell.Research.Experiment
                 new XElement(ExperimentElementName,
                     new XAttribute("name", Name),
                     new XAttribute("researcher", Researcher),
-                    new XAttribute("schemaVersion", SchemaVersion))
+                    new XAttribute("schemaVersion", SchemaVersion),
+                    new XAttribute("script", Script),
+                    new XAttribute("engine", Engine))
                 );
             var path = System.IO.Path.Combine(parentDirectory.FullName, Name, ExperimentFilename);
             xml.Save(path);

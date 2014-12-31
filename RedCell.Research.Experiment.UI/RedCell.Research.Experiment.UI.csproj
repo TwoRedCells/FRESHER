@@ -39,8 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Experiment.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\RedCell.Components\RedCell\RedCell.Portable.csproj">
+      <Project>{3f6faf82-85e6-4db2-8b8f-2b2648edf94b}</Project>
+      <Name>RedCell.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RedCell.Research\RedCell.Research.Experiment.csproj">
+      <Project>{8d912215-91f8-43a4-a4ab-df59db5e34fd}</Project>
+      <Name>RedCell.Research.Experiment</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

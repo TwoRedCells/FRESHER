@@ -20,10 +20,16 @@ namespace RedCell.Research.Experiment.UI
     /// </summary>
     public partial class ExperimentPage : Page, IExperimentUI
     {
-        public ExperimentPage()
+        private Experiment _experiment;
+
+        public ExperimentPage(string name)
         {
             InitializeComponent();
+            Facilitator.UI = this;
+            _experiment = Experiment.Load(name);
+            Facilitator.RunExperiment(_experiment);
         }
+
 
         public void MessageBox(string message)
         {

@@ -1,0 +1,33 @@
+﻿<Page x:Class="RedCell.Research.Experiment.UI.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="900" d:DesignWidth="1680"
+	Title="HomePage"  Background="Navy">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom">
+            <TextBlock Text="FRESHER" FontSize="48" FontWeight="Light"/>
+            <TextBlock Text="FRamework for Emotional Sensory Human Experimental Research" FontSize="16" FontWeight="Light"/>
+        </StackPanel>
+        <ListBox x:Name="ExperimentListBox" HorizontalAlignment="Left" Padding="20" Grid.Column="1" Grid.Row="2" FontSize="22" Background="Navy" BorderBrush="White" Foreground="White" MinWidth="500" MaxWidth="500" SelectionChanged="ExperimentListBox_Selected" SelectionMode="Single" />
+    </Grid>
+</Page>

@@ -90,22 +90,8 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         /// </summary>
         private void EnumerateExperiments()
         {
-            var root = new DirectoryInfo(Settings.ExperimentDirectory);
-            var subs = root.GetDirectories();
-            var experiments = (from sub in subs where IsExperiment(sub) select sub.Name);
-            ExperimentListBox.ItemsSource = experiments.ToList();
+            ExperimentListBox.ItemsSource = Settings.EnumerateExperiments();
         }
-
-        /// <summary>
-        /// Determines whether the specified directory is experiment.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        /// <returns><c>true</c> if the specified directory is experiment; otherwise, <c>false</c>.</returns>
-        private bool IsExperiment(DirectoryInfo directory)
-        {
-            return directory.GetFiles(Experiment.ExperimentFilename).Length == 1;
-        }
-
         /// <summary>
         /// Handles the OnSelected event of the ExperimentListBox control.
         /// </summary>

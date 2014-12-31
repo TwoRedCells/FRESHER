@@ -2,27 +2,18 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace RedCell.Research.Experiment.UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : NavigationWindow
     {
         public MainWindow()
         {
-            InitializeComponent();
-
-            Directory.SetCurrentDirectory(Settings.ExperimentDirectory);
-            Facilitator.Initialize();
-            Facilitator.UI = new ExperimentPage();
-
-            var args = Environment.GetCommandLineArgs();
-            if (args.Length == 2)
-            {
-                Facilitator.RunExperiment(args[1]);
-            }
+            this.NavigationService.Navigate(new HomePage());
         }
 
 

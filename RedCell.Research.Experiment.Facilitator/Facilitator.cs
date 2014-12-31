@@ -44,23 +44,10 @@ namespace RedCell.Research.Experiment
         /// <summary>
         /// Loads the experiment.
         /// </summary>
-        public static void RunExperiment(string path, ScriptingEngines engine = ScriptingEngines.Unknown)
+        public static void RunExperiment(Experiment experiment)
         {
-            if(string.IsNullOrWhiteSpace(path))
-                throw new ArgumentNullException("path");
-
-            if(!File.Exists(path))
-                throw new FileNotFoundException();
-
-            if (engine == ScriptingEngines.Unknown)
-            {
-                engine = GuessEngine(path);
-                if(engine == ScriptingEngines.Unknown)
-                    throw new ArgumentException("The scripting engine could not be determined. Pass it as an argument or add an extension to the path.", "path");
-            }
-
             IScript script = null;
-            switch (engine)
+            switch (experiment.Engine)
             {
                 case ScriptingEngines.Python:
                     script = new PythonScript();
@@ -71,9 +58,10 @@ namespace RedCell.Research.Experiment
                     break;
 
                 default:
-                    throw new NotImplementedException("The scripting language " + engine + "has not yet been implemented.");
+                    throw new NotImplementedException("The scripting language " + experiment.Engine + "has not yet been implemented.");
             }
 
+            var path = Path.Combine(experiment.Name, experiment.Script);
             script.Load(path);
             script.Compile();
             script.Start();

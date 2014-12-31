@@ -65,12 +65,19 @@
     <Compile Include="ExperimentPage.xaml.cs">
       <DependentUpon>ExperimentPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StripChartView.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="ImageView.cs" />
     <Compile Include="TextView.cs" />
     <Compile Include="UISleepHelper.cs" />
     <Page Include="ExperimentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -170,6 +177,7 @@
     <Resource Include="Experiments\Cute\images\polar-bear.jpg" />
     <Resource Include="Experiments\Cute\images\seal.jpg" />
     <Resource Include="Experiments\Cute\images\turtle.jpg" />
+    <Resource Include="Experiments\Cute\experiment.xml" />
     <Content Include="lib\Shim.Drawing.dll" />
     <Content Include="lib\x86\libpxcclr.cs.dll" />
     <Content Include="lib\x86\libpxccpp2c.dll" />
