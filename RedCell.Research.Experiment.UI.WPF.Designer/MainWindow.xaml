@@ -1,0 +1,71 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:syntaxHighlightBox="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
+        xmlns:wpf="clr-namespace:RedCell.UI.WPF;assembly=RedCell.UI.WPF.FileSystemExplorer"
+        xmlns:local="clr-namespace:RedCell.Research.Experiment.UI.WPF.Designer" 
+  xmlns:WPF="clr-namespace:RedCell.UI.WPF" 
+  x:Class="RedCell.Research.Experiment.UI.WPF.Designer.MainWindow"
+        Title="FRESHER Designer" Height="900" Width="1680" Closing="MainWindow_OnClosing">
+    <Window.Resources>
+        <WPF:NullToBoolConverter x:Key="NullToBoolConverter"/>
+        <WPF:EmptyStringToBoolConverter x:Key="EmptyStringToBoolConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0" MinWidth="300" VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical" >
+                <GroupBox Header="Experiment Folder" Margin="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="ExperimentFolder" Grid.Column="0" Margin="5"/>
+                        <Button Content="Browse..." Grid.Column="1" Click="Browse_OnClick" Margin="5"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Experiments" Margin="5">
+                    <StackPanel Orientation="Vertical">
+                        <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ExperimentListBox" SelectionChanged="ExperimentListBox_OnSelected" SelectionMode="Single" MinHeight="100" Margin="5"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="ExperimentName" Grid.Column="0" Margin="5"/>
+                            <Button Content="Create New" Grid.Column="1" Click="CreateNew_OnClick" Margin="5" IsEnabled="{Binding Text, Converter={StaticResource EmptyStringToBoolConverter}, ElementName=ExperimentName}" />
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+                <Separator/>
+                <GroupBox Header="Experiment Metadata" Margin="5" DataContext="" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Name" Grid.Column="0" Grid.Row="0" Margin="5"/>
+                        <TextBox x:Name="MetaName" Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Experiment.Name, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"  TextChanged="Experiment_OnTextChanged" IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+                        <TextBlock Text="Researcher" Grid.Column="0" Grid.Row="1" Margin="5"/>
+                        <TextBox x:Name="MetaResearcher" Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Experiment.Researcher, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" TextChanged="Experiment_OnTextChanged"  IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Experiment Contents" MinHeight="100" x:Name="ExperimentContents" Margin="5">
+                    <wpf:FileSystemTree HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" MinHeight="200" x:Name="FileSystemTree" SelectedItemChanged="FileSystemTree_OnSelectedItemChanged"/>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        <GridSplitter Grid.Column="1" Width="10" ShowsPreview="True" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="RoyalBlue"/>
+        <syntaxHighlightBox:SyntaxHighlightBox Grid.Column="2" MinWidth="300" x:Name="Editor"/>
+    </Grid>
+</Window>
