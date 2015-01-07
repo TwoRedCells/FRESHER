@@ -20,12 +20,13 @@ height = Camera.DefaultHeight
 if (cameraOnline):
 
     Camera.EnableFace = True
+    Camera.EnableLandmarks = True
     Camera.EnableExpression = True
     Camera.EnableEmotion = False
     Camera.EnableStreaming = True
 
     ## Create display regions for our camera views.
-    camRegion1 = UI.AddRegion(0, 0, 320, 240)
+    camRegion1 = UI.AddRegion(0, 0, 160, 120)
     #camRegion2 = UI.AddRegion(640, 0, width, height)
     #camRegion3 = UI.AddRegion(1280, 0, width, height)
 
@@ -40,9 +41,7 @@ if (cameraOnline):
     #camRegion3.Add(camView3)
 
     camRegion1.Add(CameraFaceAnnotation(camView1))
-##UI.AddCameraFaceAnnotation(viewColour)
-
-
+    camRegion1.Add(CameraLandmarksAnnotations(camView1))
 
 Camera.Start();
 
@@ -66,9 +65,8 @@ expressions = [ "EXPRESSION_SMILE", "EXPRESSION_MOUTH_OPEN", "EXPRESSION_BROW_RA
 
 log = Log();
 log.Monitor(Camera, expressions)
-
-stripRegion = UI.AddRegion(320,0,1600,240)
-strip = StripChartView(log)
+stripRegion = UI.AddRegion(160,0,1920,120)
+strip = StripChartView(log, expressions)
 stripRegion.Add(strip)
 strip.Start()
 
@@ -83,9 +81,10 @@ images = [
 ]
 
 for a in range(1,1000):
-	for image in images:
-		imageView = ImageView('Cute\\images\\' + image)
-		mainRegion.Clear()
-		mainRegion.Add(imageView)
-		UI.Wait(5)
+    for image in images:
+        imageView = ImageView('Cute\\images\\' + image)
+        mainRegion.Clear()
+        mainRegion.Add(imageView)
+        log.DataSet.AddAnnotation(image)
+        UI.Wait(5)
 

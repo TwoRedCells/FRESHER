@@ -14,8 +14,8 @@ namespace RedCell.Research.Experiment.UI
         public MainWindow()
         {
             this.NavigationService.Navigate(new HomePage());
+            Settings.ScreenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+            Settings.ScreenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
         }
-
-
     }
 }

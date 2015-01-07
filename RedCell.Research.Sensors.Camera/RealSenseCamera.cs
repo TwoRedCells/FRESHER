@@ -16,14 +16,17 @@ namespace RedCell.Research.Sensors
         /// The real sense key
         /// </summary>
         public const string RealSenseKey = "Intel(R) RealSense(TM) 3D Camera";
+
         /// <summary>
         /// The default pixel format
         /// </summary>
-        public const PXCMImage.PixelFormat DefaultPixelFormat = PXCMImage.PixelFormat.PIXEL_FORMAT_RGB24;
+        public const PXCMImage.PixelFormat DefaultPixelFormat = PXCMImage.PixelFormat.PIXEL_FORMAT_YUY2;
+
         /// <summary>
         /// The default width
         /// </summary>
         public const int DefaultWidth = 640;
+
         /// <summary>
         /// The default height
         /// </summary>
@@ -58,16 +61,21 @@ namespace RedCell.Research.Sensors
 
             // Set default camera.
             Device = Devices.Where(d => d.Key == RealSenseKey).Select(d => d.Value).FirstOrDefault();
+
+            if (Device == null)
+                Device = Devices.Select(d => d.Value).FirstOrDefault();
+
             if (Device == null)
                 return false;
 
-            if (Device != null)
-            {
-                // Set default resolution.
-                Resolution = ColorResolutions[RealSenseKey].Where(r =>
-                            r.Item1.format == DefaultPixelFormat && r.Item1.width == DefaultWidth &&
-                            r.Item1.height == DefaultHeight).Select(r => r).FirstOrDefault();
-            }
+            // Set default resolution.
+            Resolution = ColorResolutions[Device.name].Where(r =>
+                        r.Item1.format == DefaultPixelFormat && r.Item1.width == DefaultWidth &&
+                        r.Item1.height == DefaultHeight).Select(r => r).FirstOrDefault();
+
+            if (Resolution == null)
+                return false;
+
             return true;
         }
         #endregion
@@ -94,6 +102,8 @@ namespace RedCell.Research.Sensors
         public bool EnableStreaming { get; set; }
 
         public bool EnableExpression { get; set; }
+
+        public bool EnableLandmarks { get; set; }
         #endregion
 
         #region Events
@@ -133,7 +143,7 @@ namespace RedCell.Research.Sensors
         public event EventHandler<CameraFrameEventArgs> DepthImage;
 
         /// <summary>
-        /// Called when [depth image].
+        /// Called when a depth image is available..
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The e.</param>
@@ -148,7 +158,7 @@ namespace RedCell.Research.Sensors
         public event EventHandler<CameraFrameEventArgs> InfraredImage;
 
         /// <summary>
-        /// Called when [infrared image].
+        /// Called when and infrared image is available.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The e.</param>
@@ -161,7 +171,7 @@ namespace RedCell.Research.Sensors
         }
 
         /// <summary>
-        /// Occurs when [emotion found].
+        /// Occurs when an emotion is found.
         /// </summary>
         public event EventHandler<EmotionEventArgs> EmotionFound;
 
@@ -176,7 +186,21 @@ namespace RedCell.Research.Sensors
                 EmotionFound(sender, e);
         }
 
+        /// <summary>
+        /// Occurs when landmarks is found.
+        /// </summary>
+        public event EventHandler<LandmarksEventArgs> LandmarksFound;
 
+        /// <summary>
+        /// Handles the <see cref="E:LandmarksFound" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="LandmarksEventArgs"/> instance containing the event data.</param>
+        private void OnLandmarksFound(object sender, LandmarksEventArgs e)
+        {
+            if (LandmarksFound != null)
+                LandmarksFound(sender, e);
+        }
         #endregion
 
         #region Methods
@@ -221,8 +245,8 @@ namespace RedCell.Research.Sensors
             {
                 // Configure streaming.
                 _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_COLOR, 640, 480);
-                _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_DEPTH, 640, 480);
-                _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_IR, 640, 480);
+            //    _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_DEPTH, 640, 480);
+            //    _sm.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_IR, 640, 480);
             }
 
             // Event handler for data callbacks.
@@ -235,6 +259,8 @@ namespace RedCell.Research.Sensors
             // GO.
             Debug.WriteLine("{0} Starting streaming.", Time());
             _sm.StreamFrames(false);
+            
+            
 
 
             //Debug.WriteLine("{0} End streaming.", Time());
@@ -277,7 +303,6 @@ namespace RedCell.Research.Sensors
 
         pxcmStatus OnModuleProcessedFrame(int type, PXCMBase module, PXCMCapture.Sample sample) 
         {
-
             // Process the frame using the appropriate callback.
             switch(type)
             {
@@ -316,7 +341,32 @@ namespace RedCell.Research.Sensors
                 {
                     var detection = face.QueryDetection();
                     detection.QueryBoundingRect(out bounds);
-                    Debug.WriteLine("{0} Face detected: {1}", Time(), bounds);
+//                    Debug.WriteLine("{0} Face detected: {1}", Time(), bounds);
+
+                    var landmarkData = face.QueryLandmarks();
+                    if (landmarkData != null)
+                    {
+                        PXCMFaceData.LandmarkPoint[] landmarks;
+                        landmarkData.QueryPoints(out landmarks);
+
+                        var landmarkDict = new Dictionary<string, Point>();
+                        
+                        foreach(PXCMFaceData.LandmarkPoint landmark in landmarks)
+                        {
+                            landmarkDict.Add("LANDMARK_" + landmark.source.index, new Point(landmark.image.x, landmark.image.y));
+                            
+                            /*Debug.WriteLine("{0}/{1} at {2},{3},{4}",
+                                landmark.source.index,
+                                landmark.source.alias,
+                                landmark.image.x,
+                                landmark.image.y,
+                                landmark.confidenceImage);
+                            */
+                        }
+                        
+                        var landmarkArgs = new LandmarksEventArgs(landmarkDict, Resolution.Item1.width, Resolution.Item1.height);
+                        OnLandmarksFound(this, landmarkArgs);
+                    }
 
                     // Expression
                     var expressionValues = new Dictionary<string, double>();
@@ -328,7 +378,7 @@ namespace RedCell.Research.Sensors
                             PXCMFaceData.ExpressionsData.FaceExpressionResult score;
                             expressionData.QueryExpression(expression, out score);
                             expressionValues.Add(expression.ToString(), score.intensity / 100d);
-                            Debug.WriteLine("{0} Expression: {1} == {2}", Time(), expression, score.intensity / 100d);
+//                            Debug.WriteLine("{0} Expression: {1} == {2}", Time(), expression, score.intensity / 100d);
                         }
                     }
                     OnFaceFound(this, new FaceEventArgs(new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h), expressionValues, Resolution.Item1.width, Resolution.Item1.height));

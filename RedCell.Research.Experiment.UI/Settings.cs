@@ -23,6 +23,11 @@ namespace RedCell.Research.Experiment.UI
             _watcher.IncludeSubdirectories = false;
             ExperimentDirectory = LoadPath() ?? Directory.GetCurrentDirectory();
             _watcher.EnableRaisingEvents = true;
+
+            ScreenWidth = 1920;
+            ScreenHeight = 1080;
+            CoordinateWidth = 1920;
+            CoordinateHeight = 1080;
         }
 
         static void Watcher_Changed(object sender, EventArgs e)
@@ -68,6 +73,18 @@ namespace RedCell.Research.Experiment.UI
                     ExperimentDirectoryChanged(null, new FileSystemEventArgs(WatcherChangeTypes.All, value, value));
             }
         }
+
+        public static double ScreenWidth { get; set; }
+
+        public static double ScreenHeight { get; set; }
+
+        public static double CoordinateWidth { get; set; }
+
+        public static double CoordinateHeight { get; set; }
+
+        public static double ScaleX { get { return ScreenWidth / CoordinateWidth; } }
+
+        public static double ScaleY { get { return ScreenHeight / CoordinateHeight; } }
         #endregion
 
         #region Methods
@@ -109,7 +126,5 @@ namespace RedCell.Research.Experiment.UI
 
 
         #endregion
-
-
     }
 }

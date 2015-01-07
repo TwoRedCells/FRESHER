@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace RedCell.Research.Experiment.UI
 {
@@ -26,15 +27,22 @@ namespace RedCell.Research.Experiment.UI
 
         void Camera_FaceFound(object sender, FaceEventArgs e)
         {
-            Dispatcher.Invoke(() =>
-                {
-                    double scaleX = this.ActualWidth / e.Width;
-                    double scaleY = this.ActualHeight / e.Height;
-                    var bounds = e.Bounds;
-                    _rectangle.Margin = new Thickness(bounds.X * scaleX, bounds.Y * scaleY, 0, 0);
-                    _rectangle.Width = bounds.Width * scaleX;
-                    _rectangle.Height = bounds.Height * scaleY;
-                });
+            try
+            {
+                Dispatcher.Invoke(() =>
+                    {
+                        double scaleX = this.ActualWidth / e.Width;
+                        double scaleY = this.ActualHeight / e.Height;
+                        var bounds = e.Bounds;
+                        _rectangle.Margin = new Thickness(bounds.X * scaleX, bounds.Y * scaleY, 0, 0);
+                        _rectangle.Width = bounds.Width * scaleX;
+                        _rectangle.Height = bounds.Height * scaleY;
+                    });
+            }
+            catch (TaskCanceledException)
+            {
+                // Do nothing.
+            }
         }
 
     }
