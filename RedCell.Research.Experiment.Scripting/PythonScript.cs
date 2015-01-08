@@ -27,7 +27,6 @@ namespace RedCell.Research.Experiment.Scripting
         /// <summary>
         /// Starts this instance.
         /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
         public void Start()
         {
             var scope = Source.Engine.CreateScope();

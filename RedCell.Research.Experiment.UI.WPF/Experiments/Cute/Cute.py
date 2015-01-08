@@ -66,7 +66,7 @@ expressions = [ "EXPRESSION_SMILE", "EXPRESSION_MOUTH_OPEN", "EXPRESSION_BROW_RA
 log = Log();
 log.Monitor(Camera, expressions)
 stripRegion = UI.AddRegion(160,0,1920,120)
-strip = StripChartView(log, expressions)
+strip = StripChartView(log)
 stripRegion.Add(strip)
 strip.Start()
 

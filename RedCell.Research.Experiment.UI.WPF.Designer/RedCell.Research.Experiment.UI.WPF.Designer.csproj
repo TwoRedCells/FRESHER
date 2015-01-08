@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>FRESHER.logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Alfa.Common">
       <HintPath>..\packages\Alfa.Common.1.0.4923.3\lib\Alfa.Common.dll</HintPath>
@@ -116,6 +119,15 @@
       <Project>{d043537e-1585-473e-a3af-4bf5fc0e3d41}</Project>
       <Name>RedCell.UI.WPF.FileSystemExplorer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\FRESHER.logo.200.titled.white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Assets\FRESHER.splash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="FRESHER.logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

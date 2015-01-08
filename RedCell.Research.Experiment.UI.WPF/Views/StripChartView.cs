@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using RedCell.UI.WPF.Charts;
+﻿using RedCell.UI.WPF.Charts;
 
 namespace RedCell.Research.Experiment.UI
 {

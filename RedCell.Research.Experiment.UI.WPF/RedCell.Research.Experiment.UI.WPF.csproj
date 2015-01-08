@@ -39,6 +39,9 @@
   <PropertyGroup>
     <StartupObject>RedCell.Research.Experiment.UI.WPF.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>FRESHER.logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="libpxcclr.cs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ca106b2214526f83, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -183,6 +186,10 @@
     <Resource Include="Experiments\Cute\images\seal.jpg" />
     <Resource Include="Experiments\Cute\images\turtle.jpg" />
     <Resource Include="Experiments\Cute\experiment.xml" />
+    <SplashScreen Include="Assets\FRESHER.splash.png" />
+    <Resource Include="Assets\FRESHER.logo.200.titled.white.png" />
+    <Resource Include="FRESHER.logo.ico" />
+    <Resource Include="Assets\FRESHER.logo.ico" />
     <Content Include="lib\Shim.Drawing.dll" />
     <Content Include="lib\x86\libpxcclr.cs.dll" />
     <Content Include="lib\x86\libpxccpp2c.dll" />

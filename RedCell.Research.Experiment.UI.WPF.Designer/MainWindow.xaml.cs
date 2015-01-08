@@ -22,11 +22,8 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         {
             InitializeComponent();
             Settings.ExperimentDirectoryChanged += Watcher_Changed;
-        }
-
-        void Settings_ExperimentDirectoryChanged(object sender, System.EventArgs e)
-        {
-            throw new System.NotImplementedException();
+            ExperimentFolder.Text = Settings.ExperimentDirectory;
+            EnumerateExperiments();
         }
         #endregion
 
@@ -59,16 +56,6 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         }
 
         /// <summary>
-        /// Handles the Renamed event of the Watcher control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="renamedEventArgs">The <see cref="RenamedEventArgs"/> instance containing the event data.</param>
-        private void Watcher_Renamed(object sender, RenamedEventArgs renamedEventArgs)
-        {
-            Dispatcher.Invoke(EnumerateExperiments);
-        }
-
-        /// <summary>
         /// Handles the OnClick event of the Browse control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -79,6 +66,7 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
             var picker = new VistaFolderBrowserDialog {SelectedPath = Settings.ExperimentDirectory, ShowNewFolderButton = true};
             if (picker.ShowDialog().Value)
             {
+                ExperimentFolder.Text = picker.SelectedPath;
                 Settings.ExperimentDirectory = picker.SelectedPath;
                 Directory.SetCurrentDirectory(Settings.ExperimentDirectory);
                 Settings.SetPath(Settings.ExperimentDirectory);
@@ -112,6 +100,8 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
             var path = Path.Combine(Settings.ExperimentDirectory, name);
             Experiment.Load(path);
             FileSystemTree.RootPath = path;
+            //MetaResearcher.Text = Experiment.Researcher;
+            //MetaName.Text = Experiment.Name;
         }
 
         /// <summary>
@@ -144,7 +134,6 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         {
             Settings.Dispose();
         }
-        #endregion
 
         private void FileSystemTree_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -163,5 +152,6 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         {
             Experiment.Save();
         }
+        #endregion
     }
 }

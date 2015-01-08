@@ -4,16 +4,19 @@ using System.Windows.Media;
 
 namespace RedCell.Research.Experiment.UI
 {
-    public class TextView : Label, IControl
+    public class TextView : Viewbox, IControl
     {
         public TextView(string content)
         {
-            this.Content = content;
-            this.FontSize = 64;
-            this.Background = new SolidColorBrush(Colors.White);
-            this.Foreground = new SolidColorBrush(Colors.Black);
-            this.HorizontalAlignment = HorizontalAlignment.Center;
-            this.VerticalAlignment = VerticalAlignment.Center;
+            Child = new Label
+            {
+                Content = content,
+                FontSize = 64,
+                Background = new SolidColorBrush(Colors.White),
+                Foreground = new SolidColorBrush(Colors.Black),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
         }
     }
 }

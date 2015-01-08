@@ -39,7 +39,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBox x:Name="ExperimentName" Grid.Column="0" Margin="5"/>
-                            <Button Content="Create New" Grid.Column="1" Click="CreateNew_OnClick" Margin="5" IsEnabled="{Binding Text, Converter={StaticResource EmptyStringToBoolConverter}, ElementName=ExperimentName}" />
+                            <Button Content="Create New" Grid.Column="1" Click="CreateNew_OnClick" Margin="5" IsEnabled="{Binding Text, Converter={StaticResource EmptyStringToBoolConverter}, ElementName=ExperimentName}"/>
                         </Grid>
                     </StackPanel>
                 </GroupBox>
@@ -55,7 +55,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name" Grid.Column="0" Grid.Row="0" Margin="5"/>
-                        <TextBox x:Name="MetaName" Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Experiment.Name, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"  TextChanged="Experiment_OnTextChanged" IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+                        <TextBox x:Name="MetaName" Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Experiment.Name, BindsDirectlyToSource=True, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" TextChanged="Experiment_OnTextChanged" IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" SpellCheck.IsEnabled="True"/>
                         <TextBlock Text="Researcher" Grid.Column="0" Grid.Row="1" Margin="5"/>
                         <TextBox x:Name="MetaResearcher" Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Experiment.Researcher, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" TextChanged="Experiment_OnTextChanged"  IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
                     </Grid>
