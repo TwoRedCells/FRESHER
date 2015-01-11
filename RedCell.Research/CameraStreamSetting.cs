@@ -1,24 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace RedCell.Research.Experiment
 {
     /// <summary>
-    /// Class CameraEventArgs.
+    /// Camera Stream Setting.
     /// </summary>
-    public class CameraEventArgs : EventArgs
+    public class CameraStreamSetting
     {
+        #region Initialization
         /// <summary>
-        /// Initializes a new instance of the <see cref="CameraEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="CameraStreamSetting"/> class.
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public CameraEventArgs(int width, int height)
+        /// <param name="framerate">The framerate.</param>
+        public CameraStreamSetting(int width, int height, double framerate)
         {
             Width = width;
             Height = height;
+            Framerate = framerate;
         }
+        #endregion
 
+        #region Properties
         /// <summary>
         /// Gets the width.
         /// </summary>
@@ -30,5 +34,12 @@ namespace RedCell.Research.Experiment
         /// </summary>
         /// <value>The height.</value>
         public int Height { get; private set; }
+
+        /// <summary>
+        /// Gets the framerate.
+        /// </summary>
+        /// <value>The framerate.</value>
+        public double Framerate { get; private set; }
+        #endregion
     }
 }

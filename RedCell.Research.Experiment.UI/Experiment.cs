@@ -11,6 +11,9 @@ namespace RedCell.Research.Experiment
     public class Experiment
     {
         #region Constants
+        /// <summary>
+        /// The current schema version
+        /// </summary>
         public const int CurrentSchemaVersion = 1;
 
         /// <summary>
@@ -38,6 +41,10 @@ namespace RedCell.Research.Experiment
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the engine.
+        /// </summary>
+        /// <value>The engine.</value>
         public ScriptingEngines Engine { get; set; }
 
         /// <summary>

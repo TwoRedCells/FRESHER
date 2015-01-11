@@ -135,6 +135,11 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
             Settings.Dispose();
         }
 
+        /// <summary>
+        /// Files the system tree_ on selected item changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
         private void FileSystemTree_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var a = FileSystemTree.SelectedPath;
@@ -142,12 +147,21 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
                 Edit(a);
         }
 
+        /// <summary>
+        /// Edits the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
         public void Edit(string path)
         {
             if (Regex.IsMatch(path, @"\.(py|js|cs|txt|html|xml|csv|tab)$") && File.Exists(path))
                 Editor.Text = File.ReadAllText(path);
         }
 
+        /// <summary>
+        /// Handles the OnTextChanged event of the Experiment control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
         private void Experiment_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             Experiment.Save();

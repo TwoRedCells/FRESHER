@@ -1,5 +1,8 @@
 ﻿namespace RedCell.Research.Experiment
 {
+    /// <summary>
+    /// Interface IExperimentUI
+    /// </summary>
     public interface IExperimentUI
     {
         /// <summary>

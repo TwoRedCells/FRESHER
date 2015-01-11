@@ -5,9 +5,21 @@
     /// </summary>
     public enum ScriptingEngines
     {
+        /// <summary>
+        /// Unknown
+        /// </summary>
         Unknown,
+        /// <summary>
+        /// Python
+        /// </summary>
         Python,
+        /// <summary>
+        /// C#
+        /// </summary>
         CSharp,
+        /// <summary>
+        /// JavaScript
+        /// </summary>
         JavaScript
     }
 }

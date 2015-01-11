@@ -31,8 +31,16 @@ namespace RedCell.Research.Experiment.UI
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the camera.
+        /// </summary>
+        /// <value>The camera.</value>
         public ICamera Camera { get; private set; }
 
+        /// <summary>
+        /// Gets the view.
+        /// </summary>
+        /// <value>The view.</value>
         public CameraViews View { get; private set; }
         #endregion
 

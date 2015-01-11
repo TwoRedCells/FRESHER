@@ -1,16 +1,22 @@
-﻿using System;
+﻿using RedCell.Data.Charts;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RedCell.Data.Charts;
 
 namespace RedCell.Research.Experiment
 {
+    /// <summary>
+    /// Class Log.
+    /// </summary>
     public class Log
     {
+        /// <summary>
+        /// The _names
+        /// </summary>
         IEnumerable<string> _names;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Log"/> class.
+        /// </summary>
         public Log()
         {
             DataSet = new DataSet();
@@ -19,9 +25,14 @@ namespace RedCell.Research.Experiment
         /// <summary>
         /// Datas the set.
         /// </summary>
-        /// <returns>DataSet.</returns>
+        /// <value>The data set.</value>
         public DataSet DataSet { get; set; }
 
+        /// <summary>
+        /// Monitors the specified source.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="names">The names.</param>
         public void Monitor(ILoggable source, IEnumerable<string> names)
         {
             source.DataAvailable += source_DataAvailable;
@@ -31,6 +42,11 @@ namespace RedCell.Research.Experiment
                 DataSet.Add(new Series(name){Maximum = 1, Minimum = -1});
         }
 
+        /// <summary>
+        /// Handles the DataAvailable event of the source control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataEventArgs"/> instance containing the event data.</param>
         void source_DataAvailable(object sender, DataEventArgs e)
         {
             foreach(var set in e.Values)

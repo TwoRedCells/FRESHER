@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Win32;
-
 
 namespace RedCell.Research.Experiment.UI
 {
+    /// <summary>
+    /// Class Settings.
+    /// </summary>
     public static class Settings
     {
         private const string RegistryPathKey = @"Software\Red Cell Innovation Inc.\RedCell.Research.Experiment\LastPath";
@@ -13,6 +15,9 @@ namespace RedCell.Research.Experiment.UI
         private static FileSystemWatcher _watcher;
 
         #region Initialization
+        /// <summary>
+        /// Initializes static members of the <see cref="Settings"/> class.
+        /// </summary>
         static Settings()
         {
             _watcher = new FileSystemWatcher();
@@ -30,11 +35,19 @@ namespace RedCell.Research.Experiment.UI
             CoordinateHeight = 1080;
         }
 
-        static void Watcher_Changed(object sender, EventArgs e)
+        /// <summary>
+        /// Handles the Changed event of the Watcher control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private static void Watcher_Changed(object sender, EventArgs e)
         {
             OnExperimentDirectoryChanged(sender, e as FileSystemEventArgs);
         }
 
+        /// <summary>
+        /// Disposes this instance.
+        /// </summary>
         public static void Dispose()
         {
             _watcher.Renamed -= Watcher_Changed;
@@ -48,6 +61,9 @@ namespace RedCell.Research.Experiment.UI
         #endregion
 
         #region Events
+        /// <summary>
+        /// Occurs when the experiment directory changed.
+        /// </summary>
         public static event EventHandler<FileSystemEventArgs> ExperimentDirectoryChanged;
 
         private static void OnExperimentDirectoryChanged(object sender, FileSystemEventArgs e)
@@ -74,16 +90,40 @@ namespace RedCell.Research.Experiment.UI
             }
         }
 
+        /// <summary>
+        /// Gets or sets the width of the screen.
+        /// </summary>
+        /// <value>The width of the screen.</value>
         public static double ScreenWidth { get; set; }
 
+        /// <summary>
+        /// Gets or sets the height of the screen.
+        /// </summary>
+        /// <value>The height of the screen.</value>
         public static double ScreenHeight { get; set; }
 
+        /// <summary>
+        /// Gets or sets the width of the coordinate.
+        /// </summary>
+        /// <value>The width of the coordinate.</value>
         public static double CoordinateWidth { get; set; }
 
+        /// <summary>
+        /// Gets or sets the height of the coordinate.
+        /// </summary>
+        /// <value>The height of the coordinate.</value>
         public static double CoordinateHeight { get; set; }
 
+        /// <summary>
+        /// Gets the scale x.
+        /// </summary>
+        /// <value>The scale x.</value>
         public static double ScaleX { get { return ScreenWidth / CoordinateWidth; } }
 
+        /// <summary>
+        /// Gets the scale y.
+        /// </summary>
+        /// <value>The scale y.</value>
         public static double ScaleY { get { return ScreenHeight / CoordinateHeight; } }
         #endregion
 

@@ -11,6 +11,9 @@ namespace RedCell.Research.Experiment.UI
     /// </summary>
     public partial class MainWindow : NavigationWindow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
             this.NavigationService.Navigate(new HomePage());

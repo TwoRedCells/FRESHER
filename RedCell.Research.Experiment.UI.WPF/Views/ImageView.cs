@@ -6,8 +6,15 @@ using System.Windows.Media.Imaging;
 
 namespace RedCell.Research.Experiment.UI
 {
+    /// <summary>
+    /// Class ImageView.
+    /// </summary>
     public class ImageView : Image, IControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImageView"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
         public ImageView(string path)
         {
             this.Stretch = Stretch.Uniform;

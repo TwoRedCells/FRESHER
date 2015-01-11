@@ -11,6 +11,9 @@ namespace RedCell.Research.Experiment.UI
     /// </summary>
     public partial class HomePage : Page
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomePage"/> class.
+        /// </summary>
         public HomePage()
         {
             InitializeComponent();

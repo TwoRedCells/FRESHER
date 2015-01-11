@@ -4,8 +4,15 @@ using System.Windows.Media;
 
 namespace RedCell.Research.Experiment.UI
 {
+    /// <summary>
+    /// Class TextView.
+    /// </summary>
     public class TextView : Viewbox, IControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextView"/> class.
+        /// </summary>
+        /// <param name="content">The content.</param>
         public TextView(string content)
         {
             Child = new Label

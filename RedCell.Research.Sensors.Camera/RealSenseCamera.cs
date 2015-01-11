@@ -7,7 +7,7 @@ using RedCell.Research.Experiment;
 namespace RedCell.Research.Sensors
 {
     /// <summary>
-    /// Class Camera. This class cannot be inherited.
+    /// Camera controller for Intel RealSense Camera
     /// </summary>
     public sealed class RealSenseCamera : ICamera
     {
@@ -43,6 +43,8 @@ namespace RedCell.Research.Sensors
         /// </summary>
         public RealSenseCamera()
         {
+            // Defaults
+            StreamSetting = new CameraStreamSetting(640, 480, 30);
         }
 
         /// <summary>
@@ -81,11 +83,39 @@ namespace RedCell.Research.Sensors
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the session.
+        /// </summary>
+        /// <value>The session.</value>
         public static PXCMSession Session { get; private set; }
+
+        /// <summary>
+        /// Gets the devices.
+        /// </summary>
+        /// <value>The devices.</value>
         public Dictionary<string, PXCMCapture.DeviceInfo> Devices { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the device.
+        /// </summary>
+        /// <value>The device.</value>
         public PXCMCapture.DeviceInfo Device { get; set; }
+
+        /// <summary>
+        /// Gets the color resolutions.
+        /// </summary>
+        /// <value>The color resolutions.</value>
         public Dictionary<string, IEnumerable<Tuple<PXCMImage.ImageInfo, PXCMRangeF32>>> ColorResolutions { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the resolution.
+        /// </summary>
+        /// <value>The resolution.</value>
         public Tuple<PXCMImage.ImageInfo, PXCMRangeF32> Resolution { get; set; }
+
+        /// <summary>
+        /// The supported color resolutions
+        /// </summary>
         private readonly List<Tuple<int, int>> SupportedColorResolutions = new List<Tuple<int, int>>
         {
             Tuple.Create(1920, 1080),
@@ -95,36 +125,84 @@ namespace RedCell.Research.Sensors
             Tuple.Create(640, 360),
         };
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to enable face recognition.
+        /// </summary>
+        /// <value><c>true</c> if to enable face recognition; otherwise, <c>false</c>.</value>
         public bool EnableFace { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to enable emotion recognition.
+        /// </summary>
+        /// <value><c>true</c> to enable emotion recognition; otherwise, <c>false</c>.</value>
         public bool EnableEmotion { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to enable streaming.
+        /// </summary>
+        /// <value><c>true</c> to enable streaming; otherwise, <c>false</c>.</value>
         public bool EnableStreaming { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to enable expression recognition.
+        /// </summary>
+        /// <value><c>true</c> to enable expression recognition; otherwise, <c>false</c>.</value>
         public bool EnableExpression { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to enable landmarks recognition.
+        /// </summary>
+        /// <value><c>true</c> to enable landmarks recognition; otherwise, <c>false</c>.</value>
         public bool EnableLandmarks { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stream setting.
+        /// </summary>
+        /// <value>The stream setting.</value>
+        public CameraStreamSetting StreamSetting { get; set; }
         #endregion
 
         #region Events
+        /// <summary>
+        /// Occurs when a frame is available.
+        /// </summary>
         public event EventHandler<CameraFrameEventArgs> FrameAvailable;
 
+        /// <summary>
+        /// Occurs when a face is found.
+        /// </summary>
         public event EventHandler<FaceEventArgs> FaceFound;
 
+        /// <summary>
+        /// Handles the <see cref="E:FaceFound" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="FaceEventArgs"/> instance containing the event data.</param>
         private void OnFaceFound(object sender, FaceEventArgs e)
         {
             if (FaceFound != null)
                 FaceFound(sender, e);
         }
 
+        /// <summary>
+        /// Occurs when  data is available.
+        /// </summary>
         public event EventHandler<DataEventArgs> DataAvailable;
 
+        /// <summary>
+        /// Handles the <see cref="E:DataAvailable" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="DataEventArgs"/> instance containing the event data.</param>
         private void OnDataAvailable(object sender, DataEventArgs e)
         {
             if (DataAvailable != null)
                 DataAvailable(sender, e);
         }
 
+        /// <summary>
+        /// Occurs when a colour image is available.
+        /// </summary>
         public event EventHandler<CameraFrameEventArgs> ColourImage;
 
         /// <summary>
@@ -140,6 +218,9 @@ namespace RedCell.Research.Sensors
                 FrameAvailable(sender, new CameraFrameEventArgs(new CameraFrame(e.Value, CameraViews.Colour)));
         }
 
+        /// <summary>
+        /// Occurs when a depth image is available.
+        /// </summary>
         public event EventHandler<CameraFrameEventArgs> DepthImage;
 
         /// <summary>
@@ -155,6 +236,9 @@ namespace RedCell.Research.Sensors
                 FrameAvailable(sender, new CameraFrameEventArgs(new CameraFrame(e.Value, CameraViews.Depth)));
         }
 
+        /// <summary>
+        /// Occurs when an infrared image is available.
+        /// </summary>
         public event EventHandler<CameraFrameEventArgs> InfraredImage;
 
         /// <summary>
@@ -266,11 +350,18 @@ namespace RedCell.Research.Sensors
             //Debug.WriteLine("{0} End streaming.", Time());
         }
 
+        /// <summary>
+        /// Returns a formatted time string
+        /// </summary>
+        /// <returns>System.String.</returns>
         private string Time()
         {
             return DateTime.Now.ToString("H:mm:ss");
         }
 
+        /// <summary>
+        /// Enumerates the camera devices.
+        /// </summary>
         public void EnumerateDevices()
         {
             Devices = new Dictionary<string, PXCMCapture.DeviceInfo>();
@@ -300,7 +391,14 @@ namespace RedCell.Research.Sensors
             }
         }
 
-
+        /// <summary>
+        /// Called when a module has processed a frame.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="module">The module.</param>
+        /// <param name="sample">The sample.</param>
+        /// <returns>pxcmStatus.</returns>
+        /// <exception cref="System.NotImplementedException">Unknown type.</exception>
         pxcmStatus OnModuleProcessedFrame(int type, PXCMBase module, PXCMCapture.Sample sample) 
         {
             // Process the frame using the appropriate callback.
@@ -330,6 +428,10 @@ namespace RedCell.Research.Sensors
            return pxcmStatus.PXCM_STATUS_NO_ERROR;
         }
 
+        /// <summary>
+        /// Called when a face is detected.
+        /// </summary>
+        /// <param name="module">The module.</param>
         private void OnFaceCallback(PXCMFaceModule module)
         {
             PXCMRectI32 bounds;
@@ -387,6 +489,10 @@ namespace RedCell.Research.Sensors
             }
         }
 
+        /// <summary>
+        /// Called when an emotion is detected.
+        /// </summary>
+        /// <param name="module">The module.</param>
         private void OnEmotionCallback(PXCMEmotion module)
         {
             PXCMEmotion.EmotionData[] emotions;
@@ -407,6 +513,9 @@ namespace RedCell.Research.Sensors
             }
         }
 
+        /// <summary>
+        /// Stops to stop the camera.
+        /// </summary>
         public void Stop()
         {
             if (_sm != null)
@@ -416,7 +525,6 @@ namespace RedCell.Research.Sensors
                 _sm = null;
             }
         }
-
 
         /// <summary>
         /// Enumerates the resolutions.
@@ -446,9 +554,8 @@ namespace RedCell.Research.Sensors
 
                     PXCMCapture.Device device = capture.CreateDevice(j);
                     if (device == null)
-                    {
                         throw new Exception("PXCMCapture.Device null");
-                    }
+
                     var deviceResolutions = new List<Tuple<PXCMImage.ImageInfo, PXCMRangeF32>>();
 
                     for (int k = 0; k < device.QueryStreamProfileSetNum(PXCMCapture.StreamType.STREAM_TYPE_COLOR); k++)
@@ -459,9 +566,7 @@ namespace RedCell.Research.Sensors
                             profileSet.color.frameRate);
 
                         if (SupportedColorResolutions.Contains(new Tuple<int, int>(currentRes.Item1.width, currentRes.Item1.height)))
-                        {
                             deviceResolutions.Add(currentRes);
-                        }
                     }
                     ColorResolutions.Add(info.name, deviceResolutions);
                     device.Dispose();
@@ -470,9 +575,6 @@ namespace RedCell.Research.Sensors
                 capture.Dispose();
             }
         }
-
-
         #endregion
-
     }
 }
