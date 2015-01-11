@@ -31,5 +31,14 @@ namespace RedCell.Research.Experiment
         /// <value>The stream setting.</value>
         CameraStreamSetting StreamSetting { get; }
         #endregion
+
+        #region Methods
+        /// <summary>
+        /// Gets the raw frame.
+        /// </summary>
+        /// <param name="frame">The frame.</param>
+        /// <returns>System.Byte[].</returns>
+        byte[] GetRawFrame(object frame);
+        #endregion
     }
 }

@@ -576,5 +576,27 @@ namespace RedCell.Research.Sensors
             }
         }
         #endregion
+
+        #region Static Methods
+        /// <summary>
+        /// Gets the raw frame.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <returns>System.Byte[].</returns>
+        public byte[] GetRawFrame(object image)
+        {
+            const PXCMImage.PixelFormat format = PXCMImage.PixelFormat.PIXEL_FORMAT_RGB32;
+
+            var frame = image as PXCMImage;
+            if (frame == null)
+                throw new ResearchException("Frame type is unexpected.");
+
+            PXCMImage.ImageData data;
+            frame.AcquireAccess(PXCMImage.Access.ACCESS_READ, format, out data);
+            byte[] bytes = data.ToByteArray(0, StreamSetting.Width * StreamSetting.Height * 4);
+            frame.ReleaseAccess(data);
+            return bytes;
+        }
+        #endregion
     }
 }

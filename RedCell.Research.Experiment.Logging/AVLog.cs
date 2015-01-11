@@ -1,4 +1,6 @@
-﻿using SharpAvi.Output;
+﻿using SharpAvi;
+using SharpAvi.Output;
+using SharpAvi.Codecs;
 using System;
 
 namespace RedCell.Research.Experiment
@@ -9,10 +11,9 @@ namespace RedCell.Research.Experiment
     public class AVLog
     {
         #region Fields
-        /// <summary>
-        /// The _writer
-        /// </summary>
         private AviWriter _writer;
+        private IAviVideoStream _video;
+        //private IAviAudioStream _audio;
         #endregion
 
         #region Initialization
@@ -27,6 +28,7 @@ namespace RedCell.Research.Experiment
                 throw new ArgumentNullException("camera");
 
             Camera = camera;
+            EncodingQuality = 75; // Default.
         }
         #endregion
 
@@ -43,6 +45,18 @@ namespace RedCell.Research.Experiment
         /// </summary>
         /// <value>The filename.</value>
         public string Filename { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stream setting.
+        /// </summary>
+        /// <value>The stream setting.</value>
+        public CameraStreamSetting StreamSetting { get; set; }
+
+        /// <summary>
+        /// Gets or sets the encoding quality.
+        /// </summary>
+        /// <value>The encoding quality.</value>
+        public int EncodingQuality { get; set; }
         #endregion
 
         #region Methods
@@ -57,17 +71,23 @@ namespace RedCell.Research.Experiment
         /// <exception cref="System.InvalidOperationException">Filename must be set before recording.</exception>
         public void StartRecord()
         {
-            if(string.IsNullOrWhiteSpace(Filename))
-                throw new ResearchException("Filename must be set before recording.");
+            // Automatic filename
+            if (string.IsNullOrWhiteSpace(Filename))
+                Filename = "Video_" + DateTime.Now.ToString("yyyyMMddHHmmss");
 
             if(_writer != null)
                 throw new ResearchException("A recording has already started.");
 
             // Get video details from camera.
-           // Camera.
+            if (StreamSetting == null)
+                StreamSetting = Camera.StreamSetting;
 
+            var encoder = new Mpeg4VideoEncoderVcm(StreamSetting.Width, StreamSetting.Height, StreamSetting.Framerate, 0, 50, KnownFourCCs.Codecs.X264);
             _writer = new AviWriter(Filename);
-            //writer.AddMpeg4VideoStrea
+            _video = _writer.AddEncodingVideoStream(encoder, true, StreamSetting.Width, StreamSetting.Height);
+            
+
+            Camera.FrameAvailable += Camera_FrameAvailable;
         }
 
         /// <summary>
@@ -75,9 +95,21 @@ namespace RedCell.Research.Experiment
         /// </summary>
         public void StopRecord()
         {
+            Camera.FrameAvailable -= Camera_FrameAvailable;
             _writer.Close();
-
         }
+
+        /// <summary>
+        /// Handles the FrameAvailable event of the Camera control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="CameraFrameEventArgs"/> instance containing the event data.</param>
+        private void Camera_FrameAvailable(object sender, CameraFrameEventArgs e)
+        {
+            var frame = Camera.GetRawFrame(e.Value.SourceFrame);
+            _video.WriteFrame(true, frame, 0, frame.Length);
+        }
+
         #endregion
 
     }
