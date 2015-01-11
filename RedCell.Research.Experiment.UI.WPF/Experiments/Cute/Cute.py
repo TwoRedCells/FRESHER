@@ -26,7 +26,7 @@ if (cameraOnline):
     Camera.EnableStreaming = True
 
     ## Create display regions for our camera views.
-    camRegion1 = UI.AddRegion(0, 0, 160, 120)
+    camRegion1 = UI.AddRegion(0, 0, 640, 480)
     #camRegion2 = UI.AddRegion(640, 0, width, height)
     #camRegion3 = UI.AddRegion(1280, 0, width, height)
 
@@ -41,7 +41,7 @@ if (cameraOnline):
     #camRegion3.Add(camView3)
 
     camRegion1.Add(CameraFaceAnnotation(camView1))
-    camRegion1.Add(CameraLandmarksAnnotations(camView1))
+    camRegion1.Add(CameraLandmarksAnnotation(camView1))
 
 Camera.Start();
 
@@ -65,7 +65,7 @@ expressions = [ "EXPRESSION_SMILE", "EXPRESSION_MOUTH_OPEN", "EXPRESSION_BROW_RA
 
 log = Log();
 log.Monitor(Camera, expressions)
-stripRegion = UI.AddRegion(160,0,1920,120)
+stripRegion = UI.AddRegion(160,0,1700,120)
 strip = StripChartView(log)
 stripRegion.Add(strip)
 strip.Start()
