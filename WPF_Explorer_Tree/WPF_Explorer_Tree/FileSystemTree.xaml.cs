@@ -66,7 +66,7 @@ namespace RedCell.UI.WPF
         /// <summary>
         /// Handles the Loaded event of the Window control.
         /// </summary>
-        private void UpdateView()
+        public void UpdateView()
         {
             this.Items.Clear();
 

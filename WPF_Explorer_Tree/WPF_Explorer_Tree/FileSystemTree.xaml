@@ -11,7 +11,14 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
                                 Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type TreeViewItem}}, Path=Tag, Converter={x:Static local:HeaderToImageConverter.Instance}}"       />
-                            <TextBlock Text="{Binding}" Margin="5,0" />
+                            <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type TreeViewItem}}, Path=Header}" Margin="5,0" BorderBrush="Transparent" IsReadOnly="True">
+                                <TextBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Command="ApplicationCommands.New" Header="_New"/>
+                                        <MenuItem Command="ApplicationCommands.Replace" Header="_Rename"/>
+                                    </ContextMenu>
+                                </TextBox.ContextMenu> 
+                            </TextBox>
                         </StackPanel>
                     </DataTemplate>
                 </Setter.Value>

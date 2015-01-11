@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Xml.Linq;
 using RedCell.Research.Experiment.Scripting;
@@ -8,7 +9,7 @@ namespace RedCell.Research.Experiment
     /// <summary>
     /// Class Experiment.
     /// </summary>
-    public class Experiment
+    public class Experiment : INotifyPropertyChanged
     {
         #region Constants
         /// <summary>
@@ -37,6 +38,25 @@ namespace RedCell.Research.Experiment
             Name = name;
             SchemaVersion = CurrentSchemaVersion;
             Researcher = "";
+            Script = "";
+        }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Handles the <see cref="E:PropertyChanged" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(sender, e);
         }
         #endregion
 
@@ -123,9 +143,7 @@ namespace RedCell.Research.Experiment
 
             // Create Experiment directory
             if (parentDirectory.GetDirectories(Name).Length == 0)
-            {
                 parentDirectory.CreateSubdirectory(Name);
-            }
 
             var xml = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),

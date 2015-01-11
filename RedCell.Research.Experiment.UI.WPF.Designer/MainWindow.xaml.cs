@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 
@@ -24,6 +25,11 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
             Settings.ExperimentDirectoryChanged += Watcher_Changed;
             ExperimentFolder.Text = Settings.ExperimentDirectory;
             EnumerateExperiments();
+            Editor.KeyUp += (s, e) =>
+            {
+                if (e.Key == Key.S || e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+                    Save();
+            };
         }
         #endregion
 
@@ -38,10 +44,20 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         }
 
         /// <summary>
+        /// The experiment property
+        /// </summary>
+        public static readonly DependencyProperty ExperimentProperty =
+            DependencyProperty.Register("Experiment", typeof(Experiment), typeof(MainWindow));
+
+        /// <summary>
         /// Gets or sets the experiment.
         /// </summary>
         /// <value>The experiment.</value>
-        public Experiment Experiment { get; set; }
+        public Experiment Experiment
+        {
+            get { return (Experiment)GetValue(ExperimentProperty); }
+            set { SetValue(ExperimentProperty, value); }
+        }
         #endregion
 
         #region Methods
@@ -89,6 +105,8 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         private void ExperimentListBox_OnSelected(object sender, RoutedEventArgs e)
         {
             OpenExperiment(ExperimentListBox.SelectedItem as string);
+            ExperimentName.Text = ExperimentListBox.SelectedItem as string;
+            Editor.Text = "";
         }
 
         /// <summary>
@@ -98,7 +116,7 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         private void OpenExperiment(string name)
         {
             var path = Path.Combine(Settings.ExperimentDirectory, name);
-            Experiment.Load(path);
+            Experiment = Experiment.Load(path);
             FileSystemTree.RootPath = path;
             //MetaResearcher.Text = Experiment.Researcher;
             //MetaName.Text = Experiment.Name;
@@ -158,13 +176,47 @@ namespace RedCell.Research.Experiment.UI.WPF.Designer
         }
 
         /// <summary>
-        /// Handles the OnTextChanged event of the Experiment control.
+        /// Handles the LostFocus event of the MetaResearcher control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
-        private void Experiment_OnTextChanged(object sender, TextChangedEventArgs e)
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void MetaResearcher_LostFocus(object sender, RoutedEventArgs e)
         {
-            Experiment.Save();
+            if (Experiment != null)
+                Experiment.Save(Settings.ExperimentDirectory);
+        }
+
+        /// <summary>
+        /// Handles the LostFocus event of the Editor control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void Editor_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Save();
+        }
+
+        /// <summary>
+        /// Saves this instance.
+        /// </summary>
+        public void Save()
+        {
+            var p = FileSystemTree.SelectedPath;
+            if(p != null)
+                File.WriteAllText(p, Editor.Text);
+        }
+
+        /// <summary>
+        /// News the file command.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
+        private void NewFileCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            var p = FileSystemTree.SelectedPath;
+            var filename = Path.Combine(p, "NewFile");
+            File.WriteAllText(filename, "");
+            FileSystemTree.UpdateView();
         }
         #endregion
     }

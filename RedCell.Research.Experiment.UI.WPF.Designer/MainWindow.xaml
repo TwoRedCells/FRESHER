@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RedCell.Research.Experiment.UI.WPF.Designer" 
   xmlns:WPF="clr-namespace:RedCell.UI.WPF" 
   x:Class="RedCell.Research.Experiment.UI.WPF.Designer.MainWindow"
-        Title="FRESHER Designer" Height="900" Width="1680" Closing="MainWindow_OnClosing">
+        Title="FRESHER Designer" Height="900" Width="1680" Closing="MainWindow_OnClosing"
+    x:Name="_this">
     <Window.Resources>
         <WPF:NullToBoolConverter x:Key="NullToBoolConverter"/>
         <WPF:EmptyStringToBoolConverter x:Key="EmptyStringToBoolConverter"/>
@@ -38,13 +39,13 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="ExperimentName" Grid.Column="0" Margin="5"/>
+                            <TextBox x:Name="ExperimentName" Grid.Column="0" Margin="5"  />
                             <Button Content="Create New" Grid.Column="1" Click="CreateNew_OnClick" Margin="5" IsEnabled="{Binding Text, Converter={StaticResource EmptyStringToBoolConverter}, ElementName=ExperimentName}"/>
                         </Grid>
                     </StackPanel>
                 </GroupBox>
                 <Separator/>
-                <GroupBox Header="Experiment Metadata" Margin="5" DataContext="" >
+                <GroupBox Header="Experiment Metadata" Margin="5"  >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -55,17 +56,21 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name" Grid.Column="0" Grid.Row="0" Margin="5"/>
-                        <TextBox x:Name="MetaName" Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Experiment.Name, BindsDirectlyToSource=True, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" TextChanged="Experiment_OnTextChanged" IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" SpellCheck.IsEnabled="True"/>
+                        <TextBox x:Name="MetaName" Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Experiment.Name, ElementName=_this,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
                         <TextBlock Text="Researcher" Grid.Column="0" Grid.Row="1" Margin="5"/>
-                        <TextBox x:Name="MetaResearcher" Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Experiment.Researcher, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" TextChanged="Experiment_OnTextChanged"  IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+                        <TextBox x:Name="MetaResearcher" Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Experiment.Researcher, ElementName=_this, UpdateSourceTrigger=PropertyChanged}"  IsEnabled="{Binding Experiment, Converter={StaticResource NullToBoolConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" LostFocus="MetaResearcher_LostFocus"/>
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Experiment Contents" MinHeight="100" x:Name="ExperimentContents" Margin="5">
-                    <wpf:FileSystemTree HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" MinHeight="200" x:Name="FileSystemTree" SelectedItemChanged="FileSystemTree_OnSelectedItemChanged"/>
+                    <wpf:FileSystemTree HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" MinHeight="200" x:Name="FileSystemTree" SelectedItemChanged="FileSystemTree_OnSelectedItemChanged">
+           <!--             <wpf:FileSystemTree.CommandBindings>
+                            <CommandBinding Command="ApplicationCommands.New" Executed="NewFileCommand"/>
+                        </wpf:FileSystemTree.CommandBindings> -->
+                    </wpf:FileSystemTree>
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>
         <GridSplitter Grid.Column="1" Width="10" ShowsPreview="True" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="RoyalBlue"/>
-        <syntaxHighlightBox:SyntaxHighlightBox Grid.Column="2" MinWidth="300" x:Name="Editor"/>
+        <syntaxHighlightBox:SyntaxHighlightBox Grid.Column="2" MinWidth="300" x:Name="Editor" LostFocus="Editor_LostFocus" />
     </Grid>
 </Window>
